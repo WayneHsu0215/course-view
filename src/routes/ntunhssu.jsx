@@ -4,8 +4,32 @@ import {Icon} from '@iconify/react';
 import Modal from "./Modal.jsx";
 import {toast} from "react-toastify";
 
-import Timetable from './Timetable';
-import CourseItem from './CourseItem'
+
+
+const daysOfWeek = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+
+const timeSlots = [
+    '08:10~09:00',
+    '09:10~10:00',
+    '10:10~11:00',
+    '11:10~12:00',
+    '12:40~13:30',
+    '13:40~14:30',
+    '14:40~15:30',
+    '15:40~16:30',
+    '16:40~17:30',
+    '17:40~18:30',
+    '18:35~19:25',
+    '19:30~20:20',
+    '20:25~21:15',
+    '21:20~22:10',
+];
+
+// 初始化课程表
+const initialSchedule = daysOfWeek.reduce((schedule, day) => {
+    schedule[day] = timeSlots.map(() => "");
+    return schedule;
+}, {});
 
 const departmentMapping = {
     '11120': '二年制護理系',
@@ -96,6 +120,7 @@ const Ntunhssu = () => {
     const grades = ["一年級", "二年級", "三年級", "四年級", "五年級"];
 
     const weekdays = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"];
+    const [schedule, setSchedule] = useState(initialSchedule);
 
 
     const courseCategories = [
@@ -135,9 +160,6 @@ const Ntunhssu = () => {
     const [SubjectCode, setSubjectCode] = useState('');
     const [DepartmentCode, setDepartmentCode] = useState('');
     const [CoreCode, setCoreCode] = useState('');
-
-
-    const departmentName = departmentMapping[DepartmentCode] || DepartmentCode;
 
 
     const handleSearch = async () => {
@@ -200,21 +222,61 @@ const Ntunhssu = () => {
             console.error('Error during file upload:', error);
         }
     };
-    const [selectedCourses, setSelectedCourses] = useState([]);
-
 
     const handleSelectCourse = (course) => {
-        const newCourse = {
-            id: course.ID,
-            name: course.SubjectNameChinese,
-            day: course.Weekday,
-            session: course.ClassPeriods.split(',').map(period => SESSIONS[period].name) // 假设节次是逗号分隔的
+        let classPeriodsArray;
+
+        // Handle ClassPeriods
+        if (course.ClassPeriods.includes(',')) {
+            classPeriodsArray = course.ClassPeriods.split(',').map(period => parseInt(period.trim(), 10));
+        } else {
+            classPeriodsArray = [parseInt(course.ClassPeriods.trim(), 10)];
+        }
+
+        if (!Array.isArray(classPeriodsArray) || classPeriodsArray.some(isNaN)) {
+            console.error('ClassPeriods is not a valid array');
+            return;
+        }
+
+        // Map Weekday number to the corresponding day string
+        const weekdayMap = {
+            '1': '星期一',
+            '2': '星期二',
+            '3': '星期三',
+            '4': '星期四',
+            '5': '星期五',
+            '6': '星期六',
+            '7': '星期日',
         };
 
-        if (!selectedCourses.some(c => c.id === newCourse.id)) {
-            setSelectedCourses([...selectedCourses, newCourse]);
+        const weekdayString = weekdayMap[course.Weekday.toString()];
+
+        if (!daysOfWeek.includes(weekdayString)) {
+            console.error('Invalid Weekday value');
+            return;
         }
+
+        // Update the schedule
+        setSchedule((prevSchedule) => {
+            const newSchedule = { ...prevSchedule };
+            let conflictDetected = false;
+
+            classPeriodsArray.forEach((period) => {
+                const periodIndex = period - 1;
+                if (newSchedule[weekdayString][periodIndex] === "") {
+                    newSchedule[weekdayString][periodIndex] = course.name;
+                } else {
+                    // Notify about conflict
+                    console.error(`Schedule conflict detected for ${weekdayString} during period ${period}`);
+                    conflictDetected = true;
+                }
+            });
+
+            // If a conflict was detected, do not update the schedule
+            return conflictDetected ? prevSchedule : newSchedule;
+        });
     };
+
 
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -589,7 +651,10 @@ const Ntunhssu = () => {
                                             <td className="py-2 px-4">{result.ClassPeriods}</td>
                                             <td className="py-2 px-4">{departmentMapping[result.DepartmentCode] || result.DepartmentCode}</td>
                                             <td className="py-2 px-4">
-                                                <button onClick={() => handleSelectCourse(result)} className="text-blue-500 hover:text-blue-800">選擇課程</button>
+                                                <button type="button" onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleSelectCourse(result);
+                                                }} className="text-blue-500 hover:text-blue-800">選擇課程</button>
                                             </td>
                                         </tr>
 
@@ -601,8 +666,26 @@ const Ntunhssu = () => {
                                 ) : (
                                 <p>No results found</p>
                             )}
-                            <Timetable selectedCourses={selectedCourses} />
-
+                            <table className="schedule-table">
+                                <thead>
+                                <tr>
+                                    <th>时间\星期</th>
+                                    {daysOfWeek.map((day) => (
+                                        <th key={day}>{day}</th>
+                                    ))}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {timeSlots.map((timeSlot, index) => (
+                                    <tr key={index}>
+                                        <td>{timeSlot}</td>
+                                        {daysOfWeek.map((day) => (
+                                            <td key={day}>{schedule[day][index]}</td>
+                                        ))}
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </form>
