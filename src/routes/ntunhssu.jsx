@@ -224,21 +224,13 @@ const Ntunhssu = () => {
     };
 
     const handleSelectCourse = (course) => {
-        let classPeriodsArray;
-
-        // Handle ClassPeriods
-        if (course.ClassPeriods.includes(',')) {
-            classPeriodsArray = course.ClassPeriods.split(',').map(period => parseInt(period.trim(), 10));
-        } else {
-            classPeriodsArray = [parseInt(course.ClassPeriods.trim(), 10)];
-        }
+        let classPeriodsArray = course.ClassPeriods.split(',').map(period => parseInt(period.trim(), 10));
 
         if (!Array.isArray(classPeriodsArray) || classPeriodsArray.some(isNaN)) {
             console.error('ClassPeriods is not a valid array');
             return;
         }
 
-        // Map Weekday number to the corresponding day string
         const weekdayMap = {
             '1': '星期一',
             '2': '星期二',
@@ -256,26 +248,19 @@ const Ntunhssu = () => {
             return;
         }
 
-        // Update the schedule
         setSchedule((prevSchedule) => {
             const newSchedule = { ...prevSchedule };
-            let conflictDetected = false;
 
             classPeriodsArray.forEach((period) => {
                 const periodIndex = period - 1;
-                if (newSchedule[weekdayString][periodIndex] === "") {
-                    newSchedule[weekdayString][periodIndex] = course.name;
-                } else {
-                    // Notify about conflict
-                    console.error(`Schedule conflict detected for ${weekdayString} during period ${period}`);
-                    conflictDetected = true;
-                }
+                // Update the schedule with the course code
+                newSchedule[weekdayString][periodIndex] = course.SubjectNameChinese;
             });
 
-            // If a conflict was detected, do not update the schedule
-            return conflictDetected ? prevSchedule : newSchedule;
+            return newSchedule;
         });
     };
+
 
 
     return (
@@ -669,7 +654,7 @@ const Ntunhssu = () => {
                             <table className="schedule-table">
                                 <thead>
                                 <tr>
-                                    <th>时间\星期</th>
+                                    <th>時間\星期</th>
                                     {daysOfWeek.map((day) => (
                                         <th key={day}>{day}</th>
                                     ))}
