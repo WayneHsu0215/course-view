@@ -13,7 +13,7 @@ GO
 
 -- 新建資料表
 USE Courses;
-
+--rt
 
 CREATE TABLE Courses (
                          ID NVARCHAR(50),
