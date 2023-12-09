@@ -85,7 +85,7 @@ router.get('/search', async (req, res) => {
         const pool = req.app.locals.pool;
 
         // 获取查询字符串参数
-        const {  Semester,MainInstructorName,SubjectCode,DepartmentCode,CoreCode} = req.query;
+        const {  Semester,MainInstructorName,SubjectCode,DepartmentCode,CoreCode,CourseTypeName} = req.query;
 
         // 构建 SQL 查询字符串
         let queryString = 'SELECT * FROM Courses ';
@@ -107,6 +107,9 @@ router.get('/search', async (req, res) => {
         if (CoreCode) {
             conditions.push(`CoreCode LIKE '%${CoreCode}%'`);
         }
+        if (CourseTypeName) {
+            conditions.push(`CourseTypeName LIKE '%${CourseTypeName}%'`);
+        }
 
 
         // 如果有条件，将它们添加到查询中
@@ -127,6 +130,76 @@ router.get('/search', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+router.get('/search1', async (req, res) => {
+    try {
+        // Assuming the connection pool is available in app.locals.pool
+        const pool = req.app.locals.pool;
+
+        // Get query string parameters
+        const { Semester, MainInstructorName, SubjectCode, DepartmentCode, CoreCode, CourseTypeName ,Weekday,ClassPeriods} = req.query;
+
+        // Build SQL query string
+        let queryString = 'SELECT * FROM Courses ';
+
+        // Build query conditions
+        const conditions = [];
+        if (Semester) {
+            conditions.push(`Semester LIKE '%${Semester}%'`);
+        }
+        if (MainInstructorName) {
+            const MainInstructorNames = Array.isArray(MainInstructorName) ? MainInstructorName : [MainInstructorName];
+            conditions.push(`MainInstructorName IN ('${MainInstructorNames.join("','")}')`);
+        }
+        if (SubjectCode) {
+            conditions.push(`SubjectCode LIKE '%${SubjectCode}%'`);
+        }
+        if (DepartmentCode) {
+            conditions.push(`DepartmentCode LIKE '%${DepartmentCode}%'`);
+        }
+        if (CoreCode) {
+            conditions.push(`CoreCode LIKE '%${CoreCode}%'`);
+        }
+
+        if (Weekday) {
+            // Support multiple values for SubjectCode
+            const Weekdays = Array.isArray(Weekday) ? Weekday : [Weekday];
+            conditions.push(`Weekday IN ('${Weekdays.join("','")}')`);
+        }
+        if (CourseTypeName) {
+            // Support multiple values for SubjectCode
+            const CourseTypeNames = Array.isArray(CourseTypeName) ? CourseTypeName : [CourseTypeName];
+            conditions.push(`CourseTypeName IN ('${CourseTypeNames.join("','")}')`);
+        }
+        if (ClassPeriods) {
+            const classPeriodsArray = Array.isArray(ClassPeriods) ? ClassPeriods : [ClassPeriods];
+
+            // Support multiple values for ClassPeriods with fuzzy matching
+            const fuzzyConditions = classPeriodsArray.map(period => `ClassPeriods LIKE '%${period}%'`);
+            conditions.push(`(${fuzzyConditions.join(' OR ')})`);
+        }
+
+
+
+        // If there are conditions, add them to the query
+        if (conditions.length > 0) {
+            queryString += ' WHERE ' + conditions.join(' AND ');
+        }
+
+        // Execute the query
+        const result = await pool.request().query(queryString);
+
+        // Log the result to the console
+        console.log(result);
+
+        // Send the result to the client
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Error querying the Courses table', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 
 router.get('/Courses', async (req, res) => {

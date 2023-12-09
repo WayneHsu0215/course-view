@@ -119,7 +119,15 @@ const Ntunhssu = () => {
     });
     const grades = ["一年級", "二年級", "三年級", "四年級", "五年級"];
 
-    const weekdays = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"];
+    const weekdays = [
+        { value: "1", name: "星期一" },
+        { value: "2", name: "星期二" },
+        { value: "3", name: "星期三" },
+        { value: "4", name: "星期四" },
+        { value: "5", name: "星期五" },
+        { value: "6", name: "星期六" },
+        { value: "7", name: "星期日" },
+    ];
     const [schedule, setSchedule] = useState(initialSchedule);
 
 
@@ -261,6 +269,140 @@ const Ntunhssu = () => {
         });
     };
 
+    const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+    const [selectedPeriods, setSelectedPeriods] = useState([]);
+
+// Function to handle checkbox change
+    const handleCheckboxChange = (e) => {
+        const { value } = e.target;
+        // Check if the value is already in the selectedWeekdays array
+        if (selectedWeekdays.includes(value)) {
+            // If it is, remove it
+            setSelectedWeekdays(selectedWeekdays.filter(day => day !== value));
+        } else {
+            // If it's not, add it
+            setSelectedWeekdays([...selectedWeekdays, value]);
+        }
+    };
+    const handlePeriodCheckboxChange = (e) => {
+        const { value } = e.target;
+        // Check if the value is already in the selectedPeriods array
+        if (selectedPeriods.includes(value)) {
+            // If it is, remove it
+            setSelectedPeriods(selectedPeriods.filter(period => period !== value));
+        } else {
+            // If it's not, add it
+            setSelectedPeriods([...selectedPeriods, value]);
+        }
+    };
+
+//星期搜尋
+    // const handleSearch1 = async () => {
+    //     try {
+    //         const weekdayQueryParam = selectedWeekdays.map(day => `Weekday=${day}`).join('&');
+    //         const response = await fetch(`/api/search1?${weekdayQueryParam}`);
+    //         const data = await response.json();
+    //         // Process the data as needed
+    //         console.log(data);
+    //         setSearchResults(data)
+    //     } catch (error) {
+    //         console.error('Error searching courses:', error);
+    //     }
+    // };
+
+    //以必選修搜尋
+    // const handleSearch1 = async () => {
+    //     try {
+    //         const courseType = document.getElementById('courseType').value; // Get the selected course type from the dropdown
+    //         const response = await fetch(`/api/search1?CourseTypeName=${courseType}`);
+    //         const data = await response.json();
+    //         // Process the data as needed
+    //         console.log(data);
+    //         setSearchResults(data);
+    //     } catch (error) {
+    //         console.error('Error searching courses:', error);
+    //     }
+    // };
+
+    //以星期和節次搜尋
+    // const handleSearch1 = async () => {
+    //     try {
+    //         const weekdayQueryParam = selectedWeekdays.map(day => `Weekday=${day}`).join('&');
+    //         const classPeriodsQueryParam = selectedPeriods.map(period => `ClassPeriods=${period}`).join('&');
+    //
+    //         const response = await fetch(`/api/search1?${weekdayQueryParam}&${classPeriodsQueryParam}`);
+    //         const data = await response.json();
+    //
+    //         // Process the data as needed
+    //         console.log(data);
+    //         setSearchResults(data);
+    //     } catch (error) {
+    //         console.error('Error searching courses:', error);
+    //     }
+    // };
+
+
+    //以課程代碼輸入搜尋
+    // const handleSearch1 = async () => {
+    //     try {
+    //         // Retrieve values from input fields and dropdowns
+    //
+    //         const SubjectCode = document.getElementById('course').value;
+    //
+    //
+    //         const response = await fetch(`/api/search1?SubjectCode=${SubjectCode}`);
+    //
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             if (data.length > 0) {
+    //                 setSearchResults(data); // Set the search results directly
+    //             } else {
+    //                 // If no data is found, display an error message
+    //                 toast.error('未查詢符合資料', {
+    //                     className: "font-semibold",
+    //                 });
+    //             }
+    //         } else {
+    //             console.error('Failed to fetch data');
+    //         }
+    //     } catch (error) {
+    //         console.error('Server error', error);
+    //     } finally {
+    //         // Clear the input fields
+    //
+    //         document.getElementById('course').value = '';
+    //
+    //     }
+    // };
+
+
+    //用輸入課程代碼和星期、節次一起搜尋，但無法只單獨使用checkbox的星期或節次搜尋，一定要輸入課程代碼才能使用星期和節次一起搜尋
+    // const handleSearch1 = async () => {
+    //     try {
+    //         // Retrieve values from input fields and dropdowns
+    //         const SubjectCode = document.getElementById('course').value;
+    //
+    //         const weekdayQueryParam = selectedWeekdays.map(day => `Weekday=${day}`).join('&');
+    //         const classPeriodsQueryParam = selectedPeriods.map(period => `ClassPeriods=${period}`).join('&');
+    //
+    //         const response = await fetch(`/api/search1?${SubjectCode ? `SubjectCode=${SubjectCode}` : ''}&${weekdayQueryParam}&${classPeriodsQueryParam}`);
+    //         const data = await response.json();
+    //
+    //         if (data.length > 0) {
+    //             setSearchResults(data); // Set the search results directly
+    //         } else {
+    //             // If no data is found, display an error message
+    //             toast.error('未查詢符合資料', {
+    //                 className: "font-semibold",
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.error('Error searching courses:', error);
+    //     } finally {
+    //         // Clear the input fields
+    //         document.getElementById('course').value = '';
+    //     }
+    // };
 
 
     return (
@@ -442,10 +584,10 @@ const Ntunhssu = () => {
                                                    className="block text-sm font-medium text-gray-700">課別：</label>
                                             <select id="courseType"
                                                     className="mt-1 block w-full py-2 px-3 border rounded-md">
-                                                <option value="通識必修">通識必修(通識)</option>
-                                                <option value="通識選修">通識選修(通識)</option>
-                                                <option value="專業必修">專業必修(系所)</option>
-                                                <option value="專業選修">專業選修(系所)</option>
+                                                <option value="通識必修(通識)">通識必修(通識)</option>
+                                                <option value="通識選修(通識)">通識選修(通識)</option>
+                                                <option value="專業必修(系所)">專業必修(系所)</option>
+                                                <option value="專業選修(系所)">專業選修(系所)</option>
                                             </select>
                                         </div>
                                     </div>
@@ -457,14 +599,21 @@ const Ntunhssu = () => {
 
                             {isOpen.weekday && (
                                 <div className="">
-                                    <label htmlFor="grade"
-                                           className="block text-sm font-medium text-gray-700">星期：</label>
+                                    <label htmlFor="grade" className="block text-sm font-medium text-gray-700">
+                                        星期：
+                                    </label>
                                     <div className=" border rounded-l p-4 mt-2 space-y-2">
-                                        {weekdays.map(day => (
-                                            <label key={day} className="mx-4 inline-flex items-center">
-                                                <input type="checkbox" className="form-checkbox" name="weekday"
-                                                       value={day} />
-                                                <span className="mx-1">{day}</span>
+                                        {weekdays.map((day) => (
+                                            <label key={day.value} className="mx-4 inline-flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-checkbox"
+                                                    name="weekday"
+                                                    value={day.value}
+                                                    onChange={handleCheckboxChange}
+                                                    checked={selectedWeekdays.includes(day.value)}
+                                                />
+                                                <span className="mx-1">{day.name}</span>
                                             </label>
                                         ))}
                                     </div>
@@ -479,14 +628,21 @@ const Ntunhssu = () => {
                                     <div className="border rounded-l p-4 grid grid-cols-4 gap-4 w-full">
                                         {Object.entries(SESSIONS).map(([key, session]) => (
                                             <label key={key} className="flex items-center space-x-2">
-                                                <input type="checkbox" className="form-checkbox" name="period"
-                                                       value={`節${session.name}`} />
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-checkbox"
+                                                    name="period"
+                                                    value={session.name}
+                                                    onChange={handlePeriodCheckboxChange}
+                                                    checked={selectedPeriods.includes(session.name)}
+                                                />
                                                 <span>{`第${session.name}節(${session.time[0]}~${session.time[1]})`}</span>
                                             </label>
                                         ))}
                                     </div>
                                 </div>
                             )}
+
                         </div>
                         <div>
                             {isOpen.courseCategory && (
@@ -549,6 +705,9 @@ const Ntunhssu = () => {
                                 </div>
                             )}
                         </div>
+                        <button type="button" onClick={handleSearch1} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                            <Icon className="inline text-2xl mx-1" icon="line-md:search-filled"/>查詢
+                        </button>
                         <div className="mt-4">
                             <div className="bg-gray-200/80 p-4 rounded-lg">
                                 <h2 className="text-2xl font-bold mb-4">多條件查詢</h2>
