@@ -264,7 +264,7 @@ const Ntunhssu = () => {
 
 
     return (
-        <div className="bg-gray-100 min-h-screen">
+        <div className="bg-gray-100 min-h-screen ">
             <Helmet>
                 <title>課程查詢系統</title>
             </Helmet>
@@ -277,406 +277,426 @@ const Ntunhssu = () => {
                     </div>
                 )}
             </div>
-            <div className="bg-white p-6 rounded shadow-md max-w-7xl mx-auto">
-                <ul className="flex border-b mb-3 ">
-                    <li className="-mb-px mr-1">
-                        <a className="bg-white inline-block border-l border-t border-r rounded-t py-1 px-2 text-green-500 font-semibold"
-                           href="/"><Icon className="inline mx-2 text-2xl " icon="line-md:cloud-print-outline-loop" />課程查詢系統</a>
-                    </li>
-                    <li className="mr-1">
-                        <a
-                            className="bg-white inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
-                            href="https://system8.ntunhs.edu.tw/myNTUNHS_student/Modules/Main/Index_student.aspx?first=true"
-                            target="_blank"
-                            rel="noopener noreferrer">e-protfolio 學習歷程<Icon className="inline mx-2 text-2xl "
-                                                                                icon="line-md:person-search-twotone" />
-                        </a>
-                    </li>
-                    <li className="mr-1">
-                        <a
-                            className="bg-white inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
-                            href="https://system16.ntunhs.edu.tw/myNTUNHS_coc/Modules/Main/Index_COC.aspx"
-                            target="_blank"
-                            rel="noopener noreferrer">選課系統</a>
-                    </li>
-                </ul>
-                <div className="flex">
-                    <h1 className="text-2xl font-bold mb-4">國立臺北護理健康大學 課程查詢系統<Icon
-                        className="inline mx-2 text-2xl " icon="line-md:text-box" /></h1>
 
-                    <button type="button"
-                            onClick={() => setIsModalOpen(true)}
-                            className="ml-auto  hover:bg-red-500/50  border w-32 p-2 rounded-lg font-bold bg-red-300/50 text-gray-700  border-red-600/50 border-2 items-center"><Icon
-                        className="inline mx-2 text-2xl " icon="line-md:question-circle" />注意事項</button>
-                </div>
-                <Modal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                >
-                    <div className="flex flex-col items-center">
-                        <h1 className="text-2xl font-bold mb-4">注意事項<Icon
-                            className="inline mx-2 text-2xl " icon="svg-spinners:blocks-shuffle-3" /></h1>
+
+
+
+
+            <div className="flex bg-white p-6 rounded shadow-md w-11/12 mx-auto ">
+                {/* Left Column */}
+                <div className="flex flex-col  pr-4">
+
+                    <div className="flex">
+                        <div className="bg-white p-6 rounded shadow-md max-w-7xl mx-auto">
+                            <ul className="flex border-b mb-3 ">
+                                <li className="-mb-px mr-1">
+                                    <a className="bg-white inline-block border-l border-t border-r rounded-t py-1 px-2 text-green-500 font-semibold"
+                                       href="/"><Icon className="inline mx-2 text-2xl " icon="line-md:cloud-print-outline-loop" />課程查詢系統</a>
+                                </li>
+                                <li className="mr-1">
+                                    <a
+                                        className="bg-white inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
+                                        href="https://system8.ntunhs.edu.tw/myNTUNHS_student/Modules/Main/Index_student.aspx?first=true"
+                                        target="_blank"
+                                        rel="noopener noreferrer">e-protfolio 學習歷程<Icon className="inline mx-2 text-2xl "
+                                                                                            icon="line-md:person-search-twotone" />
+                                    </a>
+                                </li>
+                                <li className="mr-1">
+                                    <a
+                                        className="bg-white inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
+                                        href="https://system16.ntunhs.edu.tw/myNTUNHS_coc/Modules/Main/Index_COC.aspx"
+                                        target="_blank"
+                                        rel="noopener noreferrer">選課系統</a>
+                                </li>
+                            </ul>
+                            <div className="flex">
+                                <h1 className="text-2xl font-bold mb-4">國立臺北護理健康大學 課程查詢系統<Icon
+                                    className="inline mx-2 text-2xl " icon="line-md:text-box" /></h1>
+
+                                <button type="button"
+                                        onClick={() => setIsModalOpen(true)}
+                                        className="ml-auto  hover:bg-red-500/50  border w-32 p-2 rounded-lg font-bold bg-red-300/50 text-gray-700  border-red-600/50 border-2 items-center"><Icon
+                                    className="inline mx-2 text-2xl " icon="line-md:question-circle" />注意事項</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <form className="space-y-4">
+                        <div className="w-2/5">
+                            <label htmlFor="semester" className="block text-sm font-medium text-gray-700">學期：</label>
+                            <select id="semester" className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                <option value="112上">112學年度上學期</option>
+                                <option value="111下">111學年度下學期</option>
+                            </select>
+                        </div>
+
+                        <div className="flex h-0.5 justify-center items-start text-xs text-gray-400">
+                            <button
+                                className="mx-8"
+                                type="button"
+                                onClick={() => toggleAllDropdowns(true)}>  {/* 打開所有下拉框 */}
+                                展開全部{"<>"}
+                            </button>
+
+                            <button
+                                className="mx-8"
+                                type="button"
+                                onClick={() => toggleAllDropdowns(false)}> {/* 關閉所有下拉框 */}
+                                收起全部{"><"}
+                            </button>
+                        </div>
+                        <div className="flex justify-center w-full">
+                            <button
+                                className={`m-2 text-white px-4 py-2 rounded ${isOpen.departmentGradeType ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
+                                type="button" onClick={() => toggleDropdown('departmentGradeType')}>
+                                系所/年級/課別 {isOpen.departmentGradeType ?
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                            </button>
+                            <button
+                                className={`m-2 text-white px-4 py-2 rounded ${isOpen.weekday ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
+                                type="button" onClick={() => toggleDropdown('weekday')}>
+                                星期 {isOpen.weekday ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                            </button>
+                            <button
+                                className={`m-2 text-white px-4 py-2 rounded ${isOpen.system ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
+                                type="button" onClick={() => toggleDropdown('system')}>
+                                學制 {isOpen.system ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                            </button>
+                            <button
+                                className={`m-2 text-white px-4 py-2 rounded ${isOpen.period ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
+                                type="button" onClick={() => toggleDropdown('period')}>
+                                節次 {isOpen.period ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                            </button>
+
+                            <button
+                                className={`m-2 text-white px-4 py-2 rounded ${isOpen.courseCategory ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
+                                type="button" onClick={() => toggleDropdown('courseCategory')}>
+                                課程內容分類 {isOpen.courseCategory ?
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                            </button>
+
+                            <button
+                                className={`m-2 text-white px-4 py-2 rounded ${isOpen.teacherCourse ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
+                                type="button" onClick={() => toggleDropdown('teacherCourse')}>
+                                教師/課程 {isOpen.teacherCourse ?
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                            </button>
+                        </div>
+                        <div>
+
+                            {isOpen.system && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">學制：</label>
+
+                                    <div className="border rounded-l p-4 grid grid-cols-4 gap-4">
+
+                                        {systems.map(system => (
+                                            <label key={system} className="inline-flex items-center">
+                                                <input type="radio" className="form-radio" name="system" value={system} />
+                                                <span className="ml-2">{system}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
 
                         <div>
 
-                            <p className="text-lg text-red-600 font-bold mb-4">※本查詢執行速度比舊的快，別用舊系統了 。</p>
-                            <p className="text-lg font-bold mb-4">※所有欄位皆提供模糊查詢，請安心使用。</p>
-                            <p className="text-lg font-bold mb-4">※選課日程及注意事項等請詳閱教務處網站選課公告</p>
-                            <p className="text-lg font-bold mb-4 flex justify-center">&#8203;``【oaicite:0】``&#8203;</p>
-                        </div>
-                    </div>
-                </Modal>
-                <form className="space-y-4">
+                            <div className="flex justify-between w-full">
 
+                                {isOpen.departmentGradeType && (
 
-                    <div className="w-2/5">
-                        <label htmlFor="semester" className="block text-sm font-medium text-gray-700">學期：</label>
-                        <select id="semester" className="mt-1 block w-full py-2 px-3 border rounded-md">
-                            <option value="112上">112學年度上學期</option>
-                            <option value="111下">111學年度下學期</option>
-                        </select>
-                    </div>
+                                    <div className="w-full flex  justify-between ">
 
-                    <div className="flex h-0.5 justify-center items-start text-xs text-gray-400">
-                        <button
-                            className="mx-8"
-                            type="button"
-                            onClick={() => toggleAllDropdowns(true)}>  {/* 打開所有下拉框 */}
-                            展開全部{"<>"}
-                        </button>
+                                        <div className="w-3/4 ">
+                                            <label htmlFor="department"
+                                                   className="block  text-sm font-medium text-gray-700">系所：</label>
+                                            <select id="department"
+                                                    className=" mt-1 block w-full py-2 px-3 border rounded-md">
+                                                <option value="護理系">護理系</option>
+                                                <option value="高齡健康照護系">高齡健康照護系</option>
+                                            </select>
+                                        </div>
 
-                        <button
-                            className="mx-8"
-                            type="button"
-                            onClick={() => toggleAllDropdowns(false)}> {/* 關閉所有下拉框 */}
-                            收起全部{"><"}
-                        </button>
-                    </div>
-                    <div className="flex justify-center w-full">
-                        <button
-                            className={`m-2 text-white px-4 py-2 rounded ${isOpen.departmentGradeType ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
-                            type="button" onClick={() => toggleDropdown('departmentGradeType')}>
-                            系所/年級/課別 {isOpen.departmentGradeType ?
-                            <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                            <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
-                        </button>
-                        <button
-                            className={`m-2 text-white px-4 py-2 rounded ${isOpen.weekday ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
-                            type="button" onClick={() => toggleDropdown('weekday')}>
-                            星期 {isOpen.weekday ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                            <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
-                        </button>
-                        <button
-                            className={`m-2 text-white px-4 py-2 rounded ${isOpen.system ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
-                            type="button" onClick={() => toggleDropdown('system')}>
-                            學制 {isOpen.system ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                            <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
-                        </button>
-                        <button
-                            className={`m-2 text-white px-4 py-2 rounded ${isOpen.period ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
-                            type="button" onClick={() => toggleDropdown('period')}>
-                            節次 {isOpen.period ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                            <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
-                        </button>
+                                        <div className="w-3/4 mx-4">
+                                            <label htmlFor="grade"
+                                                   className="block text-sm font-medium text-gray-700">年級：</label>
+                                            <select id="grade" className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                                {grades.map((grade, index) => (
+                                                    <option key={index} value={index + 1}>{grade}</option>
+                                                ))}
+                                            </select>
+                                        </div>
 
-                        <button
-                            className={`m-2 text-white px-4 py-2 rounded ${isOpen.courseCategory ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
-                            type="button" onClick={() => toggleDropdown('courseCategory')}>
-                            課程內容分類 {isOpen.courseCategory ?
-                            <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                            <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
-                        </button>
+                                        <div className="w-3/4 mx-4">
+                                            <label htmlFor="courseType"
+                                                   className="block text-sm font-medium text-gray-700">課別：</label>
+                                            <select id="courseType"
+                                                    className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                                <option value="通識必修">通識必修(通識)</option>
+                                                <option value="通識選修">通識選修(通識)</option>
+                                                <option value="專業必修">專業必修(系所)</option>
+                                                <option value="專業選修">專業選修(系所)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                )}
 
-                        <button
-                            className={`m-2 text-white px-4 py-2 rounded ${isOpen.teacherCourse ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
-                            type="button" onClick={() => toggleDropdown('teacherCourse')}>
-                            教師/課程 {isOpen.teacherCourse ?
-                            <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                            <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
-                        </button>
-                    </div>
-                    <div>
-
-                        {isOpen.system && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">學制：</label>
-
-                                <div className="border rounded-l p-4 grid grid-cols-4 gap-4">
-
-                                    {systems.map(system => (
-                                        <label key={system} className="inline-flex items-center">
-                                            <input type="radio" className="form-radio" name="system" value={system} />
-                                            <span className="ml-2">{system}</span>
-                                        </label>
-                                    ))}
-                                </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                        <div>
 
-                    <div>
-
-                        <div className="flex justify-between w-full">
-
-                            {isOpen.departmentGradeType && (
-
-                                <div className="w-full flex  justify-between ">
-
-                                    <div className="w-3/4 ">
-                                        <label htmlFor="department"
-                                               className="block  text-sm font-medium text-gray-700">系所：</label>
-                                        <select id="department"
-                                                className=" mt-1 block w-full py-2 px-3 border rounded-md">
-                                            <option value="護理系">護理系</option>
-                                            <option value="高齡健康照護系">高齡健康照護系</option>
-                                        </select>
+                            {isOpen.weekday && (
+                                <div className="">
+                                    <label htmlFor="grade"
+                                           className="block text-sm font-medium text-gray-700">星期：</label>
+                                    <div className=" border rounded-l p-4 mt-2 space-y-2">
+                                        {weekdays.map(day => (
+                                            <label key={day} className="mx-4 inline-flex items-center">
+                                                <input type="checkbox" className="form-checkbox" name="weekday"
+                                                       value={day} />
+                                                <span className="mx-1">{day}</span>
+                                            </label>
+                                        ))}
                                     </div>
+                                </div>
+                            )}
+                        </div>
+                        <div>
 
-                                    <div className="w-3/4 mx-4">
-                                        <label htmlFor="grade"
-                                               className="block text-sm font-medium text-gray-700">年級：</label>
-                                        <select id="grade" className="mt-1 block w-full py-2 px-3 border rounded-md">
-                                            {grades.map((grade, index) => (
-                                                <option key={index} value={index + 1}>{grade}</option>
-                                            ))}
-                                        </select>
+                            {isOpen.period && (
+                                <div className="flex flex-col items-start w-full">
+                                    <label className="block text-sm font-medium text-gray-700">節次：</label>
+                                    <div className="border rounded-l p-4 grid grid-cols-4 gap-4 w-full">
+                                        {Object.entries(SESSIONS).map(([key, session]) => (
+                                            <label key={key} className="flex items-center space-x-2">
+                                                <input type="checkbox" className="form-checkbox" name="period"
+                                                       value={`節${session.name}`} />
+                                                <span>{`第${session.name}節(${session.time[0]}~${session.time[1]})`}</span>
+                                            </label>
+                                        ))}
                                     </div>
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            {isOpen.courseCategory && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">課程內容分類：</label>
+                                    <div className="border rounded-l p-4 grid grid-cols-3 gap-4">
+                                        {courseCategories.map(category => (
+                                            <label key={category} className="inline-flex items-center">
+                                                <input type="checkbox" className="form-checkbox" name="courseCategory" value={category} />
+                                                <span className="ml-2">{category}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
 
-                                    <div className="w-3/4 mx-4">
-                                        <label htmlFor="courseType"
-                                               className="block text-sm font-medium text-gray-700">課別：</label>
-                                        <select id="courseType"
-                                                className="mt-1 block w-full py-2 px-3 border rounded-md">
-                                            <option value="通識必修">通識必修(通識)</option>
-                                            <option value="通識選修">通識選修(通識)</option>
-                                            <option value="專業必修">專業必修(系所)</option>
-                                            <option value="專業選修">專業選修(系所)</option>
+                        <div>
+                            {isOpen.teacherCourse && (
+                                <div className="flex space-x-4 border rounded-l p-4">
+                                    <div className="flex-1">
+                                        <label htmlFor="teacher"
+                                               className="block text-sm font-medium text-gray-700">教師：</label>
+                                        <input type="text" id="teacher"
+                                               className="mt-1 block w-full py-2 px-3 border rounded-md"
+                                               placeholder="教師代碼"/>
+                                    </div>
+                                    <div className="flex-1">
+                                        <label htmlFor="course"
+                                               className="block text-sm font-medium text-gray-700">課程：</label>
+                                        <input type="text" id="course"
+                                               className="mt-1 block w-full py-2 px-3 border rounded-md"
+                                               placeholder="課程代碼"/>
+                                    </div>
+                                    <div className="flex-1">
+                                        <label htmlFor="class"
+                                               className="block text-sm font-medium text-gray-700">班級：</label>
+                                        <input type="text" id="class"
+                                               className="mt-1 block w-full py-2 px-3 border rounded-md"
+                                               placeholder="班級名稱"/>
+                                    </div>
+                                    <div className="flex-1">
+                                        <label htmlFor="classroom"
+                                               className="block text-sm font-medium text-gray-700">教室：</label>
+                                        <input type="text" id="classroom"
+                                               className="mt-1 block w-full py-2 px-3 border rounded-md"
+                                               placeholder="教室代號"/>
+                                    </div>
+                                    <div className="flex-1">
+                                        <label htmlFor="number"
+                                               className="block text-sm font-medium text-gray-700">人數：</label>
+                                        <select id="number" className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                            <option value="=">=</option>
+                                            <option value="<">{"<"}</option>
+                                            <option value=">">{">"}</option>
+                                            <option value="<">{"<="}</option>
+                                            <option value=">=">{">="}</option>
                                         </select>
                                     </div>
                                 </div>
                             )}
-
                         </div>
-                    </div>
-                    <div>
-
-                        {isOpen.weekday && (
-                            <div className="">
-                                <label htmlFor="grade"
-                                       className="block text-sm font-medium text-gray-700">星期：</label>
-                                <div className=" border rounded-l p-4 mt-2 space-y-2">
-                                    {weekdays.map(day => (
-                                        <label key={day} className="mx-4 inline-flex items-center">
-                                            <input type="checkbox" className="form-checkbox" name="weekday"
-                                                   value={day} />
-                                            <span className="mx-1">{day}</span>
-                                        </label>
-                                    ))}
+                        <div className="mt-4">
+                            <div className="bg-gray-200/80 p-4 rounded-lg">
+                                <h2 className="text-2xl font-bold mb-4">多條件查詢</h2>
+                                <div className="flex mb-4">
+                                    <input
+                                        type="text"
+                                        placeholder="輸入學年度"
+                                        value={Semester}
+                                        onChange={(e) => setSemester(e.target.value)}
+                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="MainInstructorName"
+                                        value={MainInstructorName}
+                                        onChange={(e) => setMainInstructorName(e.target.value)}
+                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="SubjectCode"
+                                        value={SubjectCode}
+                                        onChange={(e) => setSubjectCode(e.target.value)}
+                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="DepartmentCode"
+                                        value={DepartmentCode}
+                                        onChange={(e) => setDepartmentCode(e.target.value)}
+                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="CoreCode"
+                                        value={CoreCode}
+                                        onChange={(e) => setCoreCode(e.target.value)}
+                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
+                                    />
+                                    <button type="button" onClick={handleSearch} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                                        <Icon className="inline text-2xl mx-1" icon="line-md:search-filled"/>查詢
+                                    </button>
                                 </div>
                             </div>
-                        )}
-                    </div>
-                    <div>
-
-                        {isOpen.period && (
-                            <div className="flex flex-col items-start w-full">
-                                <label className="block text-sm font-medium text-gray-700">節次：</label>
-                                <div className="border rounded-l p-4 grid grid-cols-4 gap-4 w-full">
-                                    {Object.entries(SESSIONS).map(([key, session]) => (
-                                        <label key={key} className="flex items-center space-x-2">
-                                            <input type="checkbox" className="form-checkbox" name="period"
-                                                   value={`節${session.name}`} />
-                                            <span>{`第${session.name}節(${session.time[0]}~${session.time[1]})`}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                    <div>
-                        {isOpen.courseCategory && (
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">課程內容分類：</label>
-                                <div className="border rounded-l p-4 grid grid-cols-3 gap-4">
-                                    {courseCategories.map(category => (
-                                        <label key={category} className="inline-flex items-center">
-                                            <input type="checkbox" className="form-checkbox" name="courseCategory" value={category} />
-                                            <span className="ml-2">{category}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-
-                    <div>
-                        {isOpen.teacherCourse && (
-                            <div className="flex space-x-4 border rounded-l p-4">
-                                <div className="flex-1">
-                                    <label htmlFor="teacher"
-                                           className="block text-sm font-medium text-gray-700">教師：</label>
-                                    <input type="text" id="teacher"
-                                           className="mt-1 block w-full py-2 px-3 border rounded-md"
-                                           placeholder="教師代碼"/>
-                                </div>
-                                <div className="flex-1">
-                                    <label htmlFor="course"
-                                           className="block text-sm font-medium text-gray-700">課程：</label>
-                                    <input type="text" id="course"
-                                           className="mt-1 block w-full py-2 px-3 border rounded-md"
-                                           placeholder="課程代碼"/>
-                                </div>
-                                <div className="flex-1">
-                                    <label htmlFor="class"
-                                           className="block text-sm font-medium text-gray-700">班級：</label>
-                                    <input type="text" id="class"
-                                           className="mt-1 block w-full py-2 px-3 border rounded-md"
-                                           placeholder="班級名稱"/>
-                                </div>
-                                <div className="flex-1">
-                                    <label htmlFor="classroom"
-                                           className="block text-sm font-medium text-gray-700">教室：</label>
-                                    <input type="text" id="classroom"
-                                           className="mt-1 block w-full py-2 px-3 border rounded-md"
-                                           placeholder="教室代號"/>
-                                </div>
-                                <div className="flex-1">
-                                    <label htmlFor="number"
-                                           className="block text-sm font-medium text-gray-700">人數：</label>
-                                    <select id="number" className="mt-1 block w-full py-2 px-3 border rounded-md">
-                                        <option value="=">=</option>
-                                        <option value="<">{"<"}</option>
-                                        <option value=">">{">"}</option>
-                                        <option value="<">{"<="}</option>
-                                        <option value=">=">{">="}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                    <div className="mt-4">
+                                {/* 這裡顯示查詢結果 */}
+                                {searchResults.length > 0 ? (
+                                    <table className="min-w-full bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto">
+                                        <thead>
+                                        <tr>
+                                            {/* 根據您的數據結構調整表頭 */}
+                                            <th className="py-2 px-4 border-b border-gray-300">學年度</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">教授老師</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">課別</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">課程名稱</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">學分</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">教室</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">星期</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">節次</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">系所</th>
+                                            <th className="py-2 px-4 border-b border-gray-300">操作</th>
 
 
-
-                        <div className="bg-gray-200/80 p-4 rounded-lg">
-                            <h2 className="text-2xl font-bold mb-4">多條件查詢</h2>
-                            <div className="flex mb-4">
-                                <input
-                                    type="text"
-                                    placeholder="輸入學年度"
-                                    value={Semester}
-                                    onChange={(e) => setSemester(e.target.value)}
-                                    className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="MainInstructorName"
-                                    value={MainInstructorName}
-                                    onChange={(e) => setMainInstructorName(e.target.value)}
-                                    className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="SubjectCode"
-                                    value={SubjectCode}
-                                    onChange={(e) => setSubjectCode(e.target.value)}
-                                    className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="DepartmentCode"
-                                    value={DepartmentCode}
-                                    onChange={(e) => setDepartmentCode(e.target.value)}
-                                    className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="CoreCode"
-                                    value={CoreCode}
-                                    onChange={(e) => setCoreCode(e.target.value)}
-                                    className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                />
-                                <button type="button" onClick={handleSearch} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                                    <Icon className="inline text-2xl mx-1" icon="line-md:search-filled"/>查詢
-                                </button>
-                            </div>
-                        </div>
-                        <div>
-                            {/* 這裡顯示查詢結果 */}
-                            {searchResults.length > 0 ? (
-                                <table className="min-w-full bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto">
-                                    <thead>
-                                    <tr>
-                                        {/* 根據您的數據結構調整表頭 */}
-                                        <th className="py-2 px-4 border-b border-gray-300">學年度</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">教授老師</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">課別</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">課程名稱</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">學分</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">教室</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">星期</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">節次</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">系所</th>
-                                        <th className="py-2 px-4 border-b border-gray-300">操作</th>
-
-
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {searchResults.map((result, index) => (
-                                        <tr className="text-center" key={index}>
-                                            {/* 根據您的數據結構調整顯示的字段 */}
-                                            <td className="py-2 px-4">{result.Semester}</td>
-                                            <td className="py-2 px-4">{result.InstructorName}</td>
-                                            <td className="py-2 px-4">{result.CourseTypeName}</td>
-                                            <td className="py-2 px-4">{result.SubjectNameChinese}</td>
-                                            <td className="py-2 px-4">{result.Credits}</td>
-                                            <td className="py-2 px-4">{result.Location}</td>
-                                            <td className="py-2 px-4">{result.Weekday}</td>
-                                            <td className="py-2 px-4">{result.ClassPeriods}</td>
-                                            <td className="py-2 px-4">{departmentMapping[result.DepartmentCode] || result.DepartmentCode}</td>
-                                            <td className="py-2 px-4">
-                                                <button type="button" onClick={(e) => {
-                                                    e.preventDefault();
-                                                    handleSelectCourse(result);
-                                                }} className="text-blue-500 hover:text-blue-800">選擇課程</button>
-                                            </td>
                                         </tr>
+                                        </thead>
+                                        <tbody>
+                                        {searchResults.map((result, index) => (
+                                            <tr className="text-center" key={index}>
+                                                {/* 根據您的數據結構調整顯示的字段 */}
+                                                <td className="py-2 px-4">{result.Semester}</td>
+                                                <td className="py-2 px-4">{result.InstructorName}</td>
+                                                <td className="py-2 px-4">{result.CourseTypeName}</td>
+                                                <td className="py-2 px-4">{result.SubjectNameChinese}</td>
+                                                <td className="py-2 px-4">{result.Credits}</td>
+                                                <td className="py-2 px-4">{result.Location}</td>
+                                                <td className="py-2 px-4">{result.Weekday}</td>
+                                                <td className="py-2 px-4">{result.ClassPeriods}</td>
+                                                <td className="py-2 px-4">{departmentMapping[result.DepartmentCode] || result.DepartmentCode}</td>
+                                                <td className="py-2 px-4">
+                                                    <button type="button" onClick={(e) => {
+                                                        e.preventDefault();
+                                                        handleSelectCourse(result);
+                                                    }} className="text-blue-500 hover:text-blue-800">選擇課程</button>
+                                                </td>
+                                            </tr>
 
-                                    ))}
-                                    </tbody>
-                                </table>
+                                        ))}
+                                        </tbody>
+                                    </table>
 
 
                                 ) : (
-                                <p>No results found</p>
-                            )}
-                            <table className="schedule-table">
-                                <thead>
-                                <tr>
-                                    <th>時間\星期</th>
-                                    {daysOfWeek.map((day) => (
-                                        <th key={day}>{day}</th>
-                                    ))}
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {timeSlots.map((timeSlot, index) => (
-                                    <tr key={index}>
-                                        <td>{timeSlot}</td>
-                                        {daysOfWeek.map((day) => (
-                                            <td key={day}>{schedule[day][index]}</td>
-                                        ))}
-                                    </tr>
-                                ))}
-                                </tbody>
-                            </table>
+                                    <p>No results found</p>
+                                )}
+                            </div>
                         </div>
+                    </form>
+                </div>
+
+                {/* Right Column */}
+                <div className="w-1/2  flex justify-center mt-14 ">
+                    <div className="flex flex-col items-center  ">
+                    <h1 className="text-2xl font-bold text-center ml-16 fixed">課表預覽</h1>
                     </div>
-                </form>
+                    <table className="schedule-table fixed w-1/3 border border-gray-300 mt-8 text-center">
+                        <thead>
+                        <tr>
+                            <th className="border">時間\星期</th>
+                            {daysOfWeek.map((day) => (
+                                <th key={day} className="border ">{day}</th>
+                            ))}
+                        </tr>
+                        </thead>
+                        <tbody className="border">
+                        {timeSlots.map((timeSlot, index) => (
+                            <tr key={index}>
+                                <td className="border ">{timeSlot}</td>
+                                {daysOfWeek.map((day) => (
+                                    <td key={day} className="border "><p className="bg-amber-100 rounded-lg ">{schedule[day][index]}</p></td>
+                                ))}
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
 
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            >
+                <div className="flex flex-col items-center">
+                    <h1 className="text-2xl font-bold mb-4">注意事項<Icon
+                        className="inline mx-2 text-2xl " icon="svg-spinners:blocks-shuffle-3" /></h1>
+
+                    <div>
+
+                        <p className="text-lg text-red-600 font-bold mb-4">※本查詢執行速度比舊的快，別用舊系統了 。</p>
+                        <p className="text-lg font-bold mb-4">※所有欄位皆提供模糊查詢，請安心使用。</p>
+                        <p className="text-lg font-bold mb-4">※選課日程及注意事項等請詳閱教務處網站選課公告</p>
+                        <p className="text-lg font-bold mb-4 flex justify-center">&#8203;``【oaicite:0】``&#8203;</p>
+                    </div>
+                </div>
+            </Modal>
         </div>
+
+
     );
 };
 
