@@ -298,73 +298,7 @@ const Ntunhssu = () => {
     };
 
 
-    //以必選修搜尋
-    // const handleSearch1 = async () => {
-    //     try {
-    //         const courseType = document.getElementById('courseType').value; // Get the selected course type from the dropdown
-    //         const response = await fetch(`/api/search1?CourseTypeName=${courseType}`);
-    //         const data = await response.json();
-    //         // Process the data as needed
-    //         console.log(data);
-    //         setSearchResults(data);
-    //     } catch (error) {
-    //         console.error('Error searching courses:', error);
-    //     }
-    // };
 
-
-
-
-    //以星期和節次搜尋
-    // const handleSearch1 = async () => {
-    //     try {
-    //         const weekdayQueryParam = selectedWeekdays.map(day => `Weekday=${day}`).join('&');
-    //         const classPeriodsQueryParam = selectedPeriods.map(period => `ClassPeriods=${period}`).join('&');
-    //
-    //         const response = await fetch(`/api/search1?${weekdayQueryParam}&${classPeriodsQueryParam}`);
-    //         const data = await response.json();
-    //
-    //         // Process the data as needed
-    //         console.log(data);
-    //         setSearchResults(data);
-    //     } catch (error) {
-    //         console.error('Error searching courses:', error);
-    //     }
-    // };
-
-
-    //以課程代碼輸入搜尋
-    // const handleSearch1 = async () => {
-    //     try {
-    //         // Retrieve values from input fields and dropdowns
-    //
-    //         const SubjectCode = document.getElementById('course').value;
-    //
-    //
-    //         const response = await fetch(`/api/search1?SubjectCode=${SubjectCode}`);
-    //
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             if (data.length > 0) {
-    //                 setSearchResults(data); // Set the search results directly
-    //             } else {
-    //                 // If no data is found, display an error message
-    //                 toast.error('未查詢符合資料', {
-    //                     className: "font-semibold",
-    //                 });
-    //             }
-    //         } else {
-    //             console.error('Failed to fetch data');
-    //         }
-    //     } catch (error) {
-    //         console.error('Server error', error);
-    //     } finally {
-    //         // Clear the input fields
-    //
-    //         document.getElementById('course').value = '';
-    //
-    //     }
-    // };
 
     const handleSearch1 = async () => {
         try {
@@ -745,49 +679,7 @@ const Ntunhssu = () => {
                             <Icon className="inline text-2xl mx-1" icon="line-md:search-filled"/>查詢
                         </button>
                         <div className="mt-4">
-                            <div className="bg-gray-200/80 p-4 rounded-lg">
-                                <h2 className="text-2xl font-bold mb-4">多條件查詢</h2>
-                                <div className="flex mb-4">
-                                    <input
-                                        type="text"
-                                        placeholder="輸入學年度"
-                                        value={Semester}
-                                        onChange={(e) => setSemester(e.target.value)}
-                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="MainInstructorName"
-                                        value={MainInstructorName}
-                                        onChange={(e) => setMainInstructorName(e.target.value)}
-                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="SubjectCode"
-                                        value={SubjectCode}
-                                        onChange={(e) => setSubjectCode(e.target.value)}
-                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="DepartmentCode"
-                                        value={DepartmentCode}
-                                        onChange={(e) => setDepartmentCode(e.target.value)}
-                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="CoreCode"
-                                        value={CoreCode}
-                                        onChange={(e) => setCoreCode(e.target.value)}
-                                        className="px-2 py-1 mr-4 w-28 rounded-lg border-2 border-gray-400"
-                                    />
-                                    <button type="button" onClick={handleSearch} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                                        <Icon className="inline text-2xl mx-1" icon="line-md:search-filled"/>查詢
-                                    </button>
-                                </div>
-                            </div>
+
                             <div>
                                 {/* 這裡顯示查詢結果 */}
                                 {searchResults.length > 0 ? (
