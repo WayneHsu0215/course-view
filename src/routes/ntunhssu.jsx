@@ -296,19 +296,6 @@ const Ntunhssu = () => {
         }
     };
 
-//星期搜尋
-    // const handleSearch1 = async () => {
-    //     try {
-    //         const weekdayQueryParam = selectedWeekdays.map(day => `Weekday=${day}`).join('&');
-    //         const response = await fetch(`/api/search1?${weekdayQueryParam}`);
-    //         const data = await response.json();
-    //         // Process the data as needed
-    //         console.log(data);
-    //         setSearchResults(data)
-    //     } catch (error) {
-    //         console.error('Error searching courses:', error);
-    //     }
-    // };
 
     //以必選修搜尋
     // const handleSearch1 = async () => {
@@ -323,6 +310,9 @@ const Ntunhssu = () => {
     //         console.error('Error searching courses:', error);
     //     }
     // };
+
+
+
 
     //以星期和節次搜尋
     // const handleSearch1 = async () => {
@@ -375,34 +365,56 @@ const Ntunhssu = () => {
     //     }
     // };
 
+    const handleSearch1 = async () => {
+        try {
+            // Get values from the dropdowns and input fields
+            const courseType = document.getElementById('courseType')?.value;
+            const SubjectCode = document.getElementById('course')?.value;
 
-    //用輸入課程代碼和星期、節次一起搜尋，但無法只單獨使用checkbox的星期或節次搜尋，一定要輸入課程代碼才能使用星期和節次一起搜尋
-    // const handleSearch1 = async () => {
-    //     try {
-    //         // Retrieve values from input fields and dropdowns
-    //         const SubjectCode = document.getElementById('course').value;
-    //
-    //         const weekdayQueryParam = selectedWeekdays.map(day => `Weekday=${day}`).join('&');
-    //         const classPeriodsQueryParam = selectedPeriods.map(period => `ClassPeriods=${period}`).join('&');
-    //
-    //         const response = await fetch(`/api/search1?${SubjectCode ? `SubjectCode=${SubjectCode}` : ''}&${weekdayQueryParam}&${classPeriodsQueryParam}`);
-    //         const data = await response.json();
-    //
-    //         if (data.length > 0) {
-    //             setSearchResults(data); // Set the search results directly
-    //         } else {
-    //             // If no data is found, display an error message
-    //             toast.error('未查詢符合資料', {
-    //                 className: "font-semibold",
-    //             });
-    //         }
-    //     } catch (error) {
-    //         console.error('Error searching courses:', error);
-    //     } finally {
-    //         // Clear the input fields
-    //         document.getElementById('course').value = '';
-    //     }
-    // };
+            // Construct the query parameters based on the selected checkboxes and input values
+            const weekdayQueryParam = selectedWeekdays.length > 0 ? selectedWeekdays.map(day => `Weekday=${day}`).join('&') : '';
+            const classPeriodsQueryParam = selectedPeriods.length > 0 ? selectedPeriods.map(period => `ClassPeriods=${period}`).join('&') : '';
+            const courseTypeQueryParam = courseType ? `CourseTypeName=${courseType}` : '';
+            const subjectCodeQueryParam = SubjectCode ? `SubjectCode=${SubjectCode}` : '';
+
+            // Combine all query parameters
+            let queryParams = [weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam]
+                .filter(param => param) // Remove empty strings
+                .join('&');
+
+            if (!queryParams) {
+                toast.error('請至少選擇一種搜尋條件', { className: "font-semibold" });
+                return;
+            }
+
+            const response = await fetch(`/api/search1?${queryParams}`);
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.length > 0) {
+                    setSearchResults(data);
+                } else {
+                    toast.error('未查詢符合資料', { className: "font-semibold" });
+                }
+            } else {
+                console.error('Failed to fetch data');
+            }
+        } catch (error) {
+            console.error('Error searching courses:', error);
+        } finally {
+            // Clear the input fields
+            if (document.getElementById('course')) {
+                document.getElementById('course').value = '';
+            }
+            if (document.getElementById('courseType')) {
+                document.getElementById('courseType').value = '';
+            }
+            // Add any other finalization logic here
+        }
+    };
+
+
+
 
 
     return (
@@ -584,6 +596,8 @@ const Ntunhssu = () => {
                                                    className="block text-sm font-medium text-gray-700">課別：</label>
                                             <select id="courseType"
                                                     className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                                <option value="">請選擇</option>
+
                                                 <option value="通識必修(通識)">通識必修(通識)</option>
                                                 <option value="通識選修(通識)">通識選修(通識)</option>
                                                 <option value="專業必修(系所)">專業必修(系所)</option>
