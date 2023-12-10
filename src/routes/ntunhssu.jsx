@@ -1,9 +1,10 @@
 import {Helmet} from 'react-helmet';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState,useRef} from 'react';
 import {Icon} from '@iconify/react';
 import Modal from "./Modal.jsx";
 import {toast} from "react-toastify";
-
+import html2canvas from "html2canvas";
+import {jsPDF} from "jspdf";
 
 
 const daysOfWeek = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
@@ -359,6 +360,32 @@ const Ntunhssu = () => {
         }
     };
 
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false); // 用于控制导出 Modal 的打开和关闭
+    const handleCloseExportModal = () => {
+        setIsExportModalOpen(false); // 关闭导出 Modal
+    };
+    const handleExportModalOpen = () => {
+        setIsExportModalOpen(true); // 打開匯出 Modal
+    };
+
+
+    const contentRef = useRef(null);
+
+    const generatePDF = () => {
+        const content = contentRef.current;
+        if(content) {
+            html2canvas(content).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('論文主題專業領域相符審核表.pdf');
+            });
+        }
+    };
+
 
 
 
@@ -408,6 +435,10 @@ const Ntunhssu = () => {
                                 onClick={() => setIsModalOpen(true)}
                                 className="ml-auto  hover:bg-red-500/50  border w-32 p-2 rounded-lg font-bold bg-red-300/50 text-gray-700  border-red-600/50 border-2 items-center"><Icon
                             className="inline mx-2 text-2xl " icon="line-md:question-circle" />注意事項</button>
+                        <button className="ml-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center" onClick={handleExportModalOpen}>
+                            <Icon icon="mdi:file-export" className="mr-2"  width="26" height="26"/>
+                            匯出
+                        </button>
                     </div>
 
 
@@ -789,6 +820,50 @@ const Ntunhssu = () => {
                         <p className="text-lg font-bold mb-4">※選課日程及注意事項等請詳閱教務處網站選課公告</p>
                         <p className="text-lg font-bold mb-4 flex justify-center">&#8203;``【oaicite:0】``&#8203;</p>
                     </div>
+                </div>
+            </Modal>
+
+            <Modal isOpen={isExportModalOpen} onClose={handleCloseExportModal}>
+                <div className="w-[21cm] h-[29.7cm] mx-auto h-full " style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                <div className="w-full flex justify-center  overflow-x-auto p-6"  ref={contentRef}>
+                    <section className="w-full flex flex-col items-center mt-4">
+                        <header className="text-base font-bold text-center mb-4">課表預覽</header>
+                        <article
+                            className="w-full mx-auto border border-gray-300 rounded-lg  overflow-hidden text-center text-xs">
+                            <header className="flex bg-gray-200">
+                                <p className="w-1/4 py-2 px-4 border-r"></p>
+                                {daysOfWeek.map((day) => (
+                                    <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>
+                                ))}
+                            </header>
+                            {timeSlots.map((timeSlot, index) => (
+                                <section key={index} className="flex text-center">
+                                    <div className="w-1/4 border border-r flex items-center justify-center">
+                                        {timeSlot}</div>
+                                    {daysOfWeek.map((day) => {
+                                        const slot = schedule[day][index];
+                                        return (
+                                            <p key={day} className=" px-4 py-5 w-1/4 border border-r flex items-center justify-center">
+                    <span className="rounded-lg p-">
+                        <p className="bg-amber-100  rounded-lg">
+                            {slot.course}
+                            {slot.course && <span className="ml-2 p-2 text-sm">({slot.credits} 學分)</span>}
+                        </p>
+                    </span>
+                                            </p>
+                                        );
+                                    })}
+                                </section>
+                            ))}
+
+                        </article>
+                    </section>
+                </div>
+                <div className="flex justify-center">
+                <button onClick={generatePDF} style={{ marginTop: '20px' }} className="bg-red-500 hover:bg-red-700 text-white  font-bold py-2 px-4 rounded">
+                    匯出課表
+                </button>
+                </div>
                 </div>
             </Modal>
         </div>
