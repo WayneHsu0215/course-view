@@ -19,6 +19,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         const sheetData = xlsx.utils.sheet_to_json(file.Sheets[sheetName], { header: 1, skipEmpty: true });
 
         for (let i = 1; i < sheetData.length; i++) {
+
             const row = sheetData[i];
             const request = pool.request();
             request.input('ID', sql.NVarChar, row[0]);
@@ -50,23 +51,24 @@ router.post('/upload', upload.single('file'), async (req, res) => {
             request.input('TimetableNotes', sql.NVarChar, row[23]);
             request.input('CourseSummaryChinese', sql.NVarChar, row[24]);
             request.input('CourseSummaryEnglish', sql.NVarChar, row[25]);
+            const academicSystem = getAcademicSystem(row[4]);
+            request.input('AcademicSystem', sql.NVarChar, academicSystem);
+
             const query = `
                 INSERT INTO Courses (
-                    ID, Semester, MainInstructorName, SubjectCode, DepartmentCode, CoreCode,
-                    SubjectGroup, Grade, ClassGroup, SubjectNameChinese, SubjectNameEnglish,
+                    ID, Semester, MainInstructorName, SubjectCode, DepartmentCode, AcademicSystem, 
+                    CoreCode, SubjectGroup, Grade, ClassGroup, SubjectNameChinese, SubjectNameEnglish,
                     InstructorName, NumberOfStudents, NumberOfMaleStudents, NumberOfFemaleStudents,
                     Credits, WeeksOfClasses, HoursPerWeek, CourseTypeCode, CourseTypeName,
                     Location, Weekday, ClassPeriods, TimetableNotes, CourseSummaryChinese, CourseSummaryEnglish
                 ) VALUES (
-                    @ID, @Semester, @MainInstructorName, @SubjectCode, @DepartmentCode, @CoreCode,
-                    @SubjectGroup, @Grade, @ClassGroup, @SubjectNameChinese, @SubjectNameEnglish,
+                    @ID, @Semester, @MainInstructorName, @SubjectCode, @DepartmentCode, @AcademicSystem, 
+                    @CoreCode, @SubjectGroup, @Grade, @ClassGroup, @SubjectNameChinese, @SubjectNameEnglish,
                     @InstructorName, @NumberOfStudents, @NumberOfMaleStudents, @NumberOfFemaleStudents,
                     @Credits, @WeeksOfClasses, @HoursPerWeek, @CourseTypeCode, @CourseTypeName,
                     @Location, @Weekday, @ClassPeriods, @TimetableNotes, @CourseSummaryChinese, @CourseSummaryEnglish
                 )
             `;
-
-
 
             await request.query(query);
         }
@@ -77,6 +79,80 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         res.status(500).send('Error processing file');
     }
 });
+
+function getAcademicSystem(departmentCode) {
+    // Map DepartmentCode to AcademicSystem
+    const mapping = {
+        '11120': '二技',
+        '11140': '四技',
+        '11161': '碩士班',
+        '11162': '碩士班',
+        '11163': '碩士班',
+        '11164': '碩士班',
+        '11165': '碩士班',
+        '11166': '碩士班',
+        '11167': '碩士班',
+        '11168': '碩士班',
+        '11169': '碩士班',
+        '11170': '博士班',
+        '11190': '學士後系',
+        '11230': '二技(三年)',
+        '11330': '二技(三年)',
+        '11461': '碩士班',
+        '11462': '碩士班',
+        '11463': '碩士班',
+        '11464': '碩士班',
+        '11465': '碩士班',
+        '11466': '碩士班',
+        '11467': '碩士班',
+        '11468': '碩士班',
+        '11860': '碩士班',
+        '11870': '博士班',
+        '13140': '四技',
+        '1C120': '二技',
+        '1C330': '二技(三年)',
+        '1C160': '碩士班',
+        '1C860': '碩士班',
+        '1D160': '碩士班',
+        '1D120': '二技',
+        '20160': '碩士班',
+        '21120': '二技',
+        '21140': '四技',
+        '21160': '碩士班',
+        '21330': '二技(三年)',
+        '21460': '碩士班',
+        '22140': '四技',
+        '22160': '碩士班',
+        '23140': '四技',
+        '23160': '碩士班',
+        '23460': '碩士班',
+        '24120': '二技',
+        '24150': '學士後多元專長',
+        '24160': '碩士班',
+        '25140': '四技',
+        '25161': '碩士班',
+        '25162': '碩士班',
+        '25460': '碩士班',
+        '26860': '碩士班',
+        '30860': '碩士班',
+        '31120': '二技',
+        '31140': '四技',
+        '31181': '學士後學位學程',
+        '31160': '碩士班',
+        '31860': '碩士班',
+        '32140': '四技',
+        '32160': '碩士班',
+        '32460': '碩士班',
+        '33140': '四技',
+        '33161': '碩士班',
+        '33162': '碩士班',
+        '41140': '四技',
+        '42140': '四技'
+    };
+
+    return mapping[departmentCode] || '未找到該學制';
+}
+
 
 
 router.get('/search', async (req, res) => {

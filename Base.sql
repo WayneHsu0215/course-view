@@ -41,7 +41,8 @@ CREATE TABLE Courses (
                          ClassPeriods NVARCHAR(100),
                          TimetableNotes NVARCHAR(2000),
                          CourseSummaryChinese NVARCHAR(1000),
-                         CourseSummaryEnglish NVARCHAR(2000)
+                         CourseSummaryEnglish NVARCHAR(2000),
+                         AcademicSystem NVARCHAR(50)
 );
 GO
 

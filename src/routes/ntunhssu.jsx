@@ -576,6 +576,7 @@ const Ntunhssu = () => {
                                                    className="block  text-sm font-medium text-gray-700">系所：</label>
                                             <select id="department"
                                                     className=" mt-1 block w-full py-2 px-3 border rounded-md">
+                                                <option value="">請選擇</option>
                                                 <option value="護理系">護理系</option>
                                                 <option value="高齡健康照護系">高齡健康照護系</option>
                                             </select>
@@ -585,7 +586,10 @@ const Ntunhssu = () => {
                                             <label htmlFor="grade"
                                                    className="block text-sm font-medium text-gray-700">年級：</label>
                                             <select id="grade" className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                                <option value="">請選擇</option>
+
                                                 {grades.map((grade, index) => (
+
                                                     <option key={index} value={index + 1}>{grade}</option>
                                                 ))}
                                             </select>
