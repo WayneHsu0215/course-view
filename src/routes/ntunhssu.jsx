@@ -137,6 +137,7 @@ const Ntunhssu = () => {
     ];
 
     const systems = ['二技', '二技(三年)', '四技', '學士後多元專長', '碩士班', '博士班', '學士後學位學程', '學士後系'];
+    const [selectedSystems, setSelectedSystems] = useState([]);
 
 
 
@@ -376,9 +377,10 @@ const Ntunhssu = () => {
             const classPeriodsQueryParam = selectedPeriods.length > 0 ? selectedPeriods.map(period => `ClassPeriods=${period}`).join('&') : '';
             const courseTypeQueryParam = courseType ? `CourseTypeName=${courseType}` : '';
             const subjectCodeQueryParam = SubjectCode ? `SubjectCode=${SubjectCode}` : '';
+            const systemsQueryParam = selectedSystems.map(system => `AcademicSystem=${system}`).join('&');
 
             // Combine all query parameters
-            let queryParams = [weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam]
+            let queryParams = [weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam]
                 .filter(param => param) // Remove empty strings
                 .join('&');
 
@@ -413,6 +415,17 @@ const Ntunhssu = () => {
         }
     };
 
+    const handleSystemCheckboxChange = (e) => {
+        const { value } = e.target;
+        // Check if the value is already in the selectedSystems array
+        if (selectedSystems.includes(value)) {
+            // If it is, remove it
+            setSelectedSystems(selectedSystems.filter(system => system !== value));
+        } else {
+            // If it's not, add it
+            setSelectedSystems([...selectedSystems, value]);
+        }
+    };
 
 
 
@@ -549,12 +562,17 @@ const Ntunhssu = () => {
                             {isOpen.system && (
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">學制：</label>
-
                                     <div className="border rounded-l p-4 grid grid-cols-4 gap-4">
-
                                         {systems.map(system => (
                                             <label key={system} className="inline-flex items-center">
-                                                <input type="radio" className="form-radio" name="system" value={system} />
+                                                <input
+                                                    type="checkbox"
+                                                    className="form-checkbox"
+                                                    name="system"
+                                                    value={system}
+                                                    onChange={handleSystemCheckboxChange}
+                                                    checked={selectedSystems.includes(system)}
+                                                />
                                                 <span className="ml-2">{system}</span>
                                             </label>
                                         ))}
