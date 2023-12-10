@@ -683,7 +683,7 @@ const Ntunhssu = () => {
                                 {/* 這裡顯示查詢結果 */}
                                 {searchResults.length > 0 ? (
                                     <table className="min-w-full  bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto ">
-                                        <thead>
+                                        <thead className="sticky top-0 bg-gray-200">
                                         <tr >
                                             {/* 根據您的數據結構調整表頭 */}
                                             <th className="py-2 px-4 border-b  border-gray-300 bg-gray-200">學年度</th>
@@ -705,7 +705,7 @@ const Ntunhssu = () => {
                                             <tr className="text-center" key={index}>
                                                 {/* 根據您的數據結構調整顯示的字段 */}
                                                 <td className="py-2 px-4">{result.Semester}</td>
-                                                <td className="py-2 px-4">{result.InstructorName}</td>
+                                                <td className="py-2 px-4">{result.MainInstructorName}</td>
                                                 <td className="py-2 px-4">{result.CourseTypeName}</td>
                                                 <td className="py-2 px-4">{result.SubjectNameChinese}</td>
                                                 <td className="py-2 px-4">{result.Credits}</td>
