@@ -9,21 +9,18 @@ import {toast} from "react-toastify";
 const daysOfWeek = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
 
 const timeSlots = [
-    '08:10~09:00',
-    '09:10~10:00',
-    '10:10~11:00',
-    '11:10~12:00',
-    '12:40~13:30',
-    '13:40~14:30',
-    '14:40~15:30',
-    '15:40~16:30',
-    '16:40~17:30',
-    '17:40~18:30',
-    '18:35~19:25',
-    '19:30~20:20',
-    '20:25~21:15',
-    '21:20~22:10',
+    '第1節',
+    '第2節',
+    '第3節',
+    '第4節',
+    '第5節',
+    '第6節',
+    '第7節',
+    '第8節',
+    '第9節',
+    '第10節',
 ];
+
 
 // 初始化课程表
 const initialSchedule = daysOfWeek.reduce((schedule, day) => {
@@ -393,6 +390,7 @@ const Ntunhssu = () => {
                 const data = await response.json();
                 if (data.length > 0) {
                     setSearchResults(data);
+
                 } else {
                     toast.error('未查詢符合資料', { className: "font-semibold" });
                 }
@@ -431,6 +429,43 @@ const Ntunhssu = () => {
                     </div>
                 )}
             </div>
+            <div className="flex">
+                <div className=" p-6 rounded  w-11/12 mx-auto">
+                    <ul className="flex  mb-3 ">
+                        <li className="-mb-px mr-1">
+                            <a className="bg-white inline-block border-l border-t border-r rounded-t py-1 px-2 text-green-500 font-semibold"
+                               href="/"><Icon className="inline mx-2 text-2xl " icon="line-md:cloud-print-outline-loop" />課程查詢系統</a>
+                        </li>
+                        <li className="mr-1">
+                            <a
+                                className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
+                                href="https://system8.ntunhs.edu.tw/myNTUNHS_student/Modules/Main/Index_student.aspx?first=true"
+                                target="_blank"
+                                rel="noopener noreferrer">e-protfolio 學習歷程<Icon className="inline mx-2 text-2xl "
+                                                                                    icon="line-md:person-search-twotone" />
+                            </a>
+                        </li>
+                        <li className="mr-1">
+                            <a
+                                className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
+                                href="https://system16.ntunhs.edu.tw/myNTUNHS_coc/Modules/Main/Index_COC.aspx"
+                                target="_blank"
+                                rel="noopener noreferrer">選課系統</a>
+                        </li>
+                    </ul>
+                    <div className="flex">
+                        <h1 className="text-2xl font-bold mb-4">國立臺北護理健康大學 課程查詢系統<Icon
+                            className="inline mx-2 text-2xl " icon="line-md:text-box" /></h1>
+
+                        <button type="button"
+                                onClick={() => setIsModalOpen(true)}
+                                className="ml-auto  hover:bg-red-500/50  border w-32 p-2 rounded-lg font-bold bg-red-300/50 text-gray-700  border-red-600/50 border-2 items-center"><Icon
+                            className="inline mx-2 text-2xl " icon="line-md:question-circle" />注意事項</button>
+                    </div>
+
+
+                </div>
+            </div>
 
 
 
@@ -440,43 +475,7 @@ const Ntunhssu = () => {
                 {/* Left Column */}
                 <div className="flex flex-col  pr-4">
 
-                    <div className="flex">
-                        <div className="bg-white p-6 rounded shadow-md max-w-7xl mx-auto">
-                            <ul className="flex border-b mb-3 ">
-                                <li className="-mb-px mr-1">
-                                    <a className="bg-white inline-block border-l border-t border-r rounded-t py-1 px-2 text-green-500 font-semibold"
-                                       href="/"><Icon className="inline mx-2 text-2xl " icon="line-md:cloud-print-outline-loop" />課程查詢系統</a>
-                                </li>
-                                <li className="mr-1">
-                                    <a
-                                        className="bg-white inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
-                                        href="https://system8.ntunhs.edu.tw/myNTUNHS_student/Modules/Main/Index_student.aspx?first=true"
-                                        target="_blank"
-                                        rel="noopener noreferrer">e-protfolio 學習歷程<Icon className="inline mx-2 text-2xl "
-                                                                                            icon="line-md:person-search-twotone" />
-                                    </a>
-                                </li>
-                                <li className="mr-1">
-                                    <a
-                                        className="bg-white inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
-                                        href="https://system16.ntunhs.edu.tw/myNTUNHS_coc/Modules/Main/Index_COC.aspx"
-                                        target="_blank"
-                                        rel="noopener noreferrer">選課系統</a>
-                                </li>
-                            </ul>
-                            <div className="flex">
-                                <h1 className="text-2xl font-bold mb-4">國立臺北護理健康大學 課程查詢系統<Icon
-                                    className="inline mx-2 text-2xl " icon="line-md:text-box" /></h1>
 
-                                <button type="button"
-                                        onClick={() => setIsModalOpen(true)}
-                                        className="ml-auto  hover:bg-red-500/50  border w-32 p-2 rounded-lg font-bold bg-red-300/50 text-gray-700  border-red-600/50 border-2 items-center"><Icon
-                                    className="inline mx-2 text-2xl " icon="line-md:question-circle" />注意事項</button>
-                            </div>
-
-
-                        </div>
-                    </div>
                     <form className="space-y-4">
                         <div className="w-2/5">
                             <label htmlFor="semester" className="block text-sm font-medium text-gray-700">學期：</label>
@@ -826,31 +825,30 @@ const Ntunhssu = () => {
                 </div>
 
                 {/* Right Column */}
-                <div className="w-1/2  flex justify-center mt-14 ">
-                    <div className="flex flex-col items-center  ">
-                    <h1 className="text-2xl font-bold text-center ml-16 fixed">課表預覽</h1>
-                    </div>
-                    <table className="schedule-table fixed w-1/3 border border-gray-300 mt-8 text-center">
-                        <thead>
-                        <tr>
-                            <th className="border">時間\星期</th>
-                            {daysOfWeek.map((day) => (
-                                <th key={day} className="border ">{day}</th>
-                            ))}
-                        </tr>
-                        </thead>
-                        <tbody className="border">
-                        {timeSlots.map((timeSlot, index) => (
-                            <tr key={index}>
-                                <td className="border ">{timeSlot}</td>
+                <div className="w-full flex justify-center mt-4 overflow-x-auto">
+                    <section className="w-full flex flex-col items-center mt-4">
+                        <header className="text-3xl font-bold text-center mb-4">課表預覽</header>
+                        <article className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
+                            <header className="flex bg-gray-200">
+                                <p className="w-1/4 py-2 px-4 border-r"></p>
                                 {daysOfWeek.map((day) => (
-                                    <td key={day} className="border "><p className="bg-amber-100 rounded-lg ">{schedule[day][index]}</p></td>
+                                    <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>
                                 ))}
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                            </header>
+                            {timeSlots.map((timeSlot, index) => (
+                                <section key={index} className="flex text-center">
+                                    <p className="w-1/4 py-2 px-4 border-r text-center">{timeSlot}</p>
+                                    {daysOfWeek.map((day) => (
+                                        <p key={day} className="w-1/4 py-2 px-4 border-r text-center    ">
+                                            <span className="rounded-lg p-2"><p className="bg-amber-100 rounded-lg">{schedule[day][index]}</p></span>
+                                        </p>
+                                    ))}
+                                </section>
+                            ))}
+                        </article>
+                    </section>
                 </div>
+
 
             </div>
 
