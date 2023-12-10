@@ -677,16 +677,16 @@ const Ntunhssu = () => {
                         <button type="button" onClick={handleSearch1} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                             <Icon className="inline text-2xl mx-1" icon="line-md:search-filled"/>查詢
                         </button>
-                        <div className="mt-4">
+                        <div className="mt-4 text">
 
                             <div>
                                 {/* 這裡顯示查詢結果 */}
                                 {searchResults.length > 0 ? (
-                                    <table className="min-w-full bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto">
+                                    <table className="min-w-full  bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto">
                                         <thead>
                                         <tr>
                                             {/* 根據您的數據結構調整表頭 */}
-                                            <th className="py-2 px-4 border-b border-gray-300">學年度</th>
+                                            <th className="py-2 px-4 border-b  border-gray-300">學年度</th>
                                             <th className="py-2 px-4 border-b border-gray-300">教授老師</th>
                                             <th className="py-2 px-4 border-b border-gray-300">課別</th>
                                             <th className="py-2 px-4 border-b border-gray-300">課程名稱</th>
@@ -732,32 +732,33 @@ const Ntunhssu = () => {
                             </div>
                         </div>
                     </form>
+                    <div className="w-full flex justify-center mt-4 overflow-x-auto">
+                        <section className="w-full flex flex-col items-center mt-4">
+                            <header className="text-3xl font-bold text-center mb-4">課表預覽</header>
+                            <article className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
+                                <header className="flex bg-gray-200">
+                                    <p className="w-1/4 py-2 px-4 border-r"></p>
+                                    {daysOfWeek.map((day) => (
+                                        <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>
+                                    ))}
+                                </header>
+                                {timeSlots.map((timeSlot, index) => (
+                                    <section key={index} className="flex text-center">
+                                        <p className="w-1/4 py-2 px-4 border-r text-center">{timeSlot}</p>
+                                        {daysOfWeek.map((day) => (
+                                            <p key={day} className="w-1/4 py-2 px-4 border-r text-center    ">
+                                                <span className="rounded-lg p-2"><p className="bg-amber-100 rounded-lg">{schedule[day][index]}</p></span>
+                                            </p>
+                                        ))}
+                                    </section>
+                                ))}
+                            </article>
+                        </section>
+                    </div>
                 </div>
 
                 {/* Right Column */}
-                <div className="w-full flex justify-center mt-4 overflow-x-auto">
-                    <section className="w-full flex flex-col items-center mt-4">
-                        <header className="text-3xl font-bold text-center mb-4">課表預覽</header>
-                        <article className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
-                            <header className="flex bg-gray-200">
-                                <p className="w-1/4 py-2 px-4 border-r"></p>
-                                {daysOfWeek.map((day) => (
-                                    <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>
-                                ))}
-                            </header>
-                            {timeSlots.map((timeSlot, index) => (
-                                <section key={index} className="flex text-center">
-                                    <p className="w-1/4 py-2 px-4 border-r text-center">{timeSlot}</p>
-                                    {daysOfWeek.map((day) => (
-                                        <p key={day} className="w-1/4 py-2 px-4 border-r text-center    ">
-                                            <span className="rounded-lg p-2"><p className="bg-amber-100 rounded-lg">{schedule[day][index]}</p></span>
-                                        </p>
-                                    ))}
-                                </section>
-                            ))}
-                        </article>
-                    </section>
-                </div>
+
 
 
             </div>
