@@ -418,9 +418,9 @@ const Ntunhssu = () => {
 
 
 
-            <div className="flex bg-white p-6 rounded shadow-md w-11/12 mx-auto ">
+            <div className="flex bg-white p-6 rounded shadow-md w-11/12 mx-auto justify-center">
                 {/* Left Column */}
-                <div className="flex flex-col  pr-4">
+                <div className="flex flex-col  pr-4 w-10/12">
 
 
                     <form className="space-y-4">
@@ -679,23 +679,23 @@ const Ntunhssu = () => {
                         </button>
                         <div className="mt-4 text">
 
-                            <div>
+                            <div  style={{ maxHeight: '400px', overflowY: 'auto' }}>
                                 {/* 這裡顯示查詢結果 */}
                                 {searchResults.length > 0 ? (
-                                    <table className="min-w-full  bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto">
+                                    <table className="min-w-full  bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto ">
                                         <thead>
-                                        <tr>
+                                        <tr >
                                             {/* 根據您的數據結構調整表頭 */}
-                                            <th className="py-2 px-4 border-b  border-gray-300">學年度</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">教授老師</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">課別</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">課程名稱</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">學分</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">教室</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">星期</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">節次</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">系所</th>
-                                            <th className="py-2 px-4 border-b border-gray-300">操作</th>
+                                            <th className="py-2 px-4 border-b  border-gray-300 bg-gray-200">學年度</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">教授老師</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">課別</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">課程名稱</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">學分</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">教室</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">星期</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">節次</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">系所</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">操作</th>
 
 
                                         </tr>
@@ -733,7 +733,7 @@ const Ntunhssu = () => {
                         </div>
                     </form>
                     <div className="w-full flex justify-center mt-4 overflow-x-auto">
-                        <section className="w-full flex flex-col items-center mt-4">
+                        <section className="w-9/12 flex flex-col items-center mt-4">
                             <header className="text-3xl font-bold text-center mb-4">課表預覽</header>
                             <article className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
                                 <header className="flex bg-gray-200">
@@ -757,7 +757,7 @@ const Ntunhssu = () => {
                     </div>
                 </div>
 
-                {/* Right Column */}
+
 
 
 
