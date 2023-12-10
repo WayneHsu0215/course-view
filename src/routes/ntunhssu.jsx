@@ -22,9 +22,9 @@ const timeSlots = [
 ];
 
 
-// 初始化课程表
+
 const initialSchedule = daysOfWeek.reduce((schedule, day) => {
-    schedule[day] = timeSlots.map(() => "");
+    schedule[day] = timeSlots.map(() => ({course: "", credits: ""}));
     return schedule;
 }, {});
 
@@ -253,14 +253,14 @@ const Ntunhssu = () => {
             console.error('Invalid Weekday value');
             return;
         }
-
         setSchedule((prevSchedule) => {
-            const newSchedule = { ...prevSchedule };
+            const newSchedule = {...prevSchedule};
 
             classPeriodsArray.forEach((period) => {
                 const periodIndex = period - 1;
                 // Update the schedule with the course code
-                newSchedule[weekdayString][periodIndex] = course.SubjectNameChinese;
+                newSchedule[weekdayString][periodIndex] = {course: course.SubjectNameChinese, credits: course.Credits};
+
             });
 
             return newSchedule;
@@ -733,9 +733,10 @@ const Ntunhssu = () => {
                         </div>
                     </form>
                     <div className="w-full flex justify-center mt-4 overflow-x-auto">
-                        <section className="w-9/12 flex flex-col items-center mt-4">
+                        <section className="w-full flex flex-col items-center mt-4">
                             <header className="text-3xl font-bold text-center mb-4">課表預覽</header>
-                            <article className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
+                            <article
+                                className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
                                 <header className="flex bg-gray-200">
                                     <p className="w-1/4 py-2 px-4 border-r"></p>
                                     {daysOfWeek.map((day) => (
@@ -744,14 +745,24 @@ const Ntunhssu = () => {
                                 </header>
                                 {timeSlots.map((timeSlot, index) => (
                                     <section key={index} className="flex text-center">
-                                        <p className="w-1/4 py-2 px-4 border-r text-center">{timeSlot}</p>
-                                        {daysOfWeek.map((day) => (
-                                            <p key={day} className="w-1/4 py-2 px-4 border-r text-center    ">
-                                                <span className="rounded-lg p-2"><p className="bg-amber-100 rounded-lg">{schedule[day][index]}</p></span>
-                                            </p>
-                                        ))}
+                                        <div className="w-1/4 border border-r flex items-center justify-center">
+                                            {timeSlot}</div>
+                                        {daysOfWeek.map((day) => {
+                                            const slot = schedule[day][index];
+                                            return (
+                                                <p key={day} className="w-1/4 border py-2 px-4 border-r text-center">
+                    <span className="rounded-lg p-">
+                        <p className="bg-amber-100  rounded-lg">
+                            {slot.course}
+                            {slot.course && <span className="ml-2 p-2 text-sm">({slot.credits} 學分)</span>}
+                        </p>
+                    </span>
+                                                </p>
+                                            );
+                                        })}
                                     </section>
                                 ))}
+
                             </article>
                         </section>
                     </div>
