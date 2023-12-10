@@ -296,7 +296,47 @@ const Ntunhssu = () => {
     };
 
 
+    const [departments, setDepartments] = useState([]);
 
+
+
+
+    const onSystemCheckboxChange = async (e) => {
+        const selectedSystem = e.target.value;
+        // 更新所選學制的狀態
+        setSelectedSystems(prev => {
+            // 如果选中，则添加到数组
+            if (e.target.checked) {
+                return [...prev, selectedSystem];
+            } else {
+                // 如果取消选中，则从数组移除
+                return prev.filter(system => system !== selectedSystem);
+            }
+        });
+
+        // 如果选中，则获取该学制的系所数据
+        if (e.target.checked) {
+            try {
+                const response = await fetch(`/api/departments?academicSystem=${selectedSystem}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setDepartments(prevDepartments => {
+                        // 将新获取的系所数据与当前数据合并
+                        return [...prevDepartments, ...data];
+                    });
+                } else {
+                    toast.error('无法获取系所数据');
+                }
+            } catch (error) {
+                console.error('Error fetching departments:', error);
+                toast.error('服务器错误');
+            }
+        } else {
+            // 如果取消选中，可以选择清空系所数据或保留不变
+            // 这里选择清空：
+            setDepartments([]);
+        }
+    };
 
     const handleSearch1 = async () => {
         try {
@@ -349,16 +389,44 @@ const Ntunhssu = () => {
     };
 
     const handleSystemCheckboxChange = (e) => {
-        const { value } = e.target;
-        // Check if the value is already in the selectedSystems array
-        if (selectedSystems.includes(value)) {
-            // If it is, remove it
-            setSelectedSystems(selectedSystems.filter(system => system !== value));
-        } else {
-            // If it's not, add it
-            setSelectedSystems([...selectedSystems, value]);
-        }
+        const { value, checked } = e.target;
+        setSelectedSystems(prev => {
+            // 如果选中，则添加到数组
+            if (checked) {
+                return [...prev, value];
+            } else {
+                // 如果取消选中，则从数组移除
+                return prev.filter(system => system !== value);
+            }
+        });
     };
+    useEffect(() => {
+        const fetchDepartments = async (url) => {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const data = await response.json();
+                    setDepartments(data);
+                } else {
+                    toast.error('无法获取系所数据');
+                }
+            } catch (error) {
+                console.error('Error fetching departments:', error);
+                toast.error('服务器错误');
+            }
+        };
+
+        if (selectedSystems.length > 0) {
+            // 有選擇學制時，添加學制到查詢參數並發送請求
+            const queryParams = new URLSearchParams({ academicSystem: selectedSystems.join(',') }).toString();
+            fetchDepartments(`/api/departments?${queryParams}`);
+        } else {
+            // 沒有選擇學制時，發送請求獲取所有系所
+            fetchDepartments('/api/AllDepartments');
+        }
+    }, [selectedSystems]);
+
+
 
     const [isExportModalOpen, setIsExportModalOpen] = useState(false); // 用于控制导出 Modal 的打开和关闭
     const handleCloseExportModal = () => {
@@ -534,8 +602,7 @@ const Ntunhssu = () => {
                                                     className="form-checkbox"
                                                     name="system"
                                                     value={system}
-                                                    onChange={handleSystemCheckboxChange}
-                                                    checked={selectedSystems.includes(system)}
+                                                    onChange={onSystemCheckboxChange} // 使用 onSystemCheckboxChange 处理变更
                                                 />
                                                 <span className="ml-2">{system}</span>
                                             </label>
@@ -556,11 +623,11 @@ const Ntunhssu = () => {
                                         <div className="w-3/4 ">
                                             <label htmlFor="department"
                                                    className="block  text-sm font-medium text-gray-700">系所：</label>
-                                            <select id="department"
-                                                    className=" mt-1 block w-full py-2 px-3 border rounded-md">
-                                                <option value="">請選擇</option>
-                                                <option value="護理系">護理系</option>
-                                                <option value="高齡健康照護系">高齡健康照護系</option>
+                                            <select id="department" className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                                <option value="">選擇</option>
+                                                {departments.map((dept, index) => (
+                                                    <option key={index} value={dept.DepartmentName}>{dept.DepartmentName}</option>
+                                                ))}
                                             </select>
                                         </div>
 
@@ -691,17 +758,7 @@ const Ntunhssu = () => {
                                                className="mt-1 block w-full py-2 px-3 border rounded-md"
                                                placeholder="教室代號"/>
                                     </div>
-                                    <div className="flex-1">
-                                        <label htmlFor="number"
-                                               className="block text-sm font-medium text-gray-700">人數：</label>
-                                        <select id="number" className="mt-1 block w-full py-2 px-3 border rounded-md">
-                                            <option value="=">=</option>
-                                            <option value="<">{"<"}</option>
-                                            <option value=">">{">"}</option>
-                                            <option value="<">{"<="}</option>
-                                            <option value=">=">{">="}</option>
-                                        </select>
-                                    </div>
+
                                 </div>
                             )}
                         </div>
@@ -710,8 +767,10 @@ const Ntunhssu = () => {
                         </button>
                         <div className="mt-4 text">
 
+
                             <div  style={{ maxHeight: '400px', overflowY: 'auto' }}>
                                 {/* 這裡顯示查詢結果 */}
+                                <header className="text-2xl font-bold text-center mb-4">查詢結果</header>
                                 {searchResults.length > 0 ? (
                                     <table className="min-w-full  bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto ">
                                         <thead className="sticky top-0 bg-gray-200">
@@ -733,9 +792,9 @@ const Ntunhssu = () => {
                                         </thead>
                                         <tbody>
                                         {searchResults.map((result, index) => (
-                                            <tr className="text-center" key={index}>
+                                            <tr className="text-center border" key={index}>
                                                 {/* 根據您的數據結構調整顯示的字段 */}
-                                                <td className="py-2 px-4">{result.Semester}</td>
+                                                <td className="py-2  px-4">{result.Semester}</td>
                                                 <td className="py-2 px-4">{result.MainInstructorName}</td>
                                                 <td className="py-2 px-4">{result.CourseTypeName}</td>
                                                 <td className="py-2 px-4">{result.SubjectNameChinese}</td>
@@ -765,7 +824,7 @@ const Ntunhssu = () => {
                     </form>
                     <div className="w-full flex justify-center mt-4 overflow-x-auto">
                         <section className="w-full flex flex-col items-center mt-4">
-                            <header className="text-3xl font-bold text-center mb-4">課表預覽</header>
+                            <header className="text-2xl font-bold text-center mb-4">課表預覽</header>
                             <article
                                 className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
                                 <header className="flex bg-gray-200">

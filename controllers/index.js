@@ -299,7 +299,50 @@ router.get('/Courses', async (req, res) => {
     }
 });
 
+router.get('/departments', async (req, res) => {
+    try {
+        const pool = req.app.locals.pool;
 
+        // 将查询参数分割成数组
+        const academicSystems = req.query.academicSystem.split(',');
+
+        // 动态构建参数列表和查询字符串
+        const params = academicSystems.map((system, index) => `@system${index}`);
+        let query = `SELECT DepartmentName FROM AcademicDepartments WHERE AcademicSystem IN (${params.join(', ')})`;
+
+        const request = pool.request();
+
+        // 为每个参数赋值
+        academicSystems.forEach((system, index) => {
+            request.input(`system${index}`, sql.NVarChar, system);
+        });
+
+        let result = await request.query(query);
+
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('SQL error', err);
+        res.status(500).send('Server Error');
+    }
+});
+
+router.get('/AllDepartments', async (req, res) => {
+
+    try {
+        const pool = req.app.locals.pool;
+
+        const result = await pool.request().query('SELECT * FROM AcademicDepartments');
+
+        console.log(result);
+
+        res.json(result.recordset);
+
+    }
+    catch (err) {
+        console.error('SQL error', err);
+        res.status(500).send('Server Error');
+    }
+});
 export default router;
 
 
