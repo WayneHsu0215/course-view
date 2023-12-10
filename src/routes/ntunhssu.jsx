@@ -750,7 +750,7 @@ const Ntunhssu = () => {
                                         {daysOfWeek.map((day) => {
                                             const slot = schedule[day][index];
                                             return (
-                                                <p key={day} className="w-1/4 border py-2 px-4 border-r text-center">
+                                                <p key={day} className="py-2 px-4 w-1/4 border border-r flex items-center justify-center">
                     <span className="rounded-lg p-">
                         <p className="bg-amber-100  rounded-lg">
                             {slot.course}
