@@ -115,7 +115,6 @@ const Ntunhssu = () => {
         D: {name: '13', time: ['20:25', '21:15']},
         E: {name: '14', time: ['21:20', '22:10']},
     });
-    const grades = ["一年級", "二年級", "三年級", "四年級", "五年級"];
 
     const weekdays = [
         { value: "1", name: "星期一" },
@@ -126,6 +125,17 @@ const Ntunhssu = () => {
         { value: "6", name: "星期六" },
         { value: "7", name: "星期日" },
     ];
+
+    const grades = [
+        { value: "1", name: "一年級" },
+        { value: "2", name: "二年級" },
+        { value: "3", name: "三年級" },
+        { value: "4", name: "四年級" },
+        { value: "5", name: "五年級" },
+    ];;
+
+
+
     const [schedule, setSchedule] = useState(initialSchedule);
 
 
@@ -167,6 +177,8 @@ const Ntunhssu = () => {
     const [SubjectCode, setSubjectCode] = useState('');
     const [DepartmentCode, setDepartmentCode] = useState('');
     const [CoreCode, setCoreCode] = useState('');
+    const [selectedGrade, setSelectedGrade] = useState('');
+
 
 
     const handleSearch = async () => {
@@ -203,6 +215,13 @@ const Ntunhssu = () => {
     }
 
     const [uploadProgress, setUploadProgress] = useState(0);
+
+    const [selectedDepartment, setSelectedDepartment] = useState('');
+
+    // 處理下拉選單改變
+    const handleDepartmentChange = (e) => {
+        setSelectedDepartment(e.target.value);
+    };
 
     const handleFileUpload = async (event) => {
         const file = event.target.files[0];
@@ -340,6 +359,8 @@ const Ntunhssu = () => {
 
     const handleSearch1 = async () => {
         try {
+            setSearchResults([]);
+
             // Get values from the dropdowns and input fields
             const courseType = document.getElementById('courseType')?.value;
             const SubjectCode = document.getElementById('course')?.value;
@@ -350,9 +371,12 @@ const Ntunhssu = () => {
             const courseTypeQueryParam = courseType ? `CourseTypeName=${courseType}` : '';
             const subjectCodeQueryParam = SubjectCode ? `SubjectCode=${SubjectCode}` : '';
             const systemsQueryParam = selectedSystems.map(system => `AcademicSystem=${system}`).join('&');
+            const gradeQueryParam = selectedGrade ? `Grade=${selectedGrade}` : '';
+            const selectedDepartment = document.getElementById('department')?.value;
+            const departmentCodeQueryParam = selectedDepartment ? `DepartmentCode=${selectedDepartment}` : '';
 
             // Combine all query parameters
-            let queryParams = [weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam]
+            let queryParams = [departmentCodeQueryParam,weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
                 .filter(param => param) // Remove empty strings
                 .join('&');
 
@@ -366,7 +390,7 @@ const Ntunhssu = () => {
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {
-                    setSearchResults(data);
+                    setSearchResults(data); // 更新查詢結果
 
                 } else {
                     toast.error('未查詢符合資料', { className: "font-semibold" });
@@ -623,10 +647,11 @@ const Ntunhssu = () => {
                                         <div className="w-3/4 ">
                                             <label htmlFor="department"
                                                    className="block  text-sm font-medium text-gray-700">系所：</label>
-                                            <select id="department" className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                            <select id="department" className="mt-1 block w-full py-2 px-3 border rounded-md"
+                                                    onChange={handleDepartmentChange}>
                                                 <option value="">選擇</option>
                                                 {departments.map((dept, index) => (
-                                                    <option key={index} value={dept.DepartmentName}>{dept.DepartmentName}</option>
+                                                    <option key={index} value={dept.AcademicSystemCode}>{dept.DepartmentName}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -634,12 +659,14 @@ const Ntunhssu = () => {
                                         <div className="w-3/4 mx-4">
                                             <label htmlFor="grade"
                                                    className="block text-sm font-medium text-gray-700">年級：</label>
-                                            <select id="grade" className="mt-1 block w-full py-2 px-3 border rounded-md">
+                                            <select id="grade" className="mt-1 block w-full py-2 px-3 border rounded-md"
+                                                    onChange={(e) => setSelectedGrade(e.target.value)}
+                                            >
                                                 <option value="">請選擇</option>
 
                                                 {grades.map((grade, index) => (
 
-                                                    <option key={index} value={index + 1}>{grade}</option>
+                                                    <option key={index} value={grade.value}>{grade.name}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -730,13 +757,7 @@ const Ntunhssu = () => {
                         <div>
                             {isOpen.teacherCourse && (
                                 <div className="flex space-x-4 border rounded-l p-4">
-                                    <div className="flex-1">
-                                        <label htmlFor="teacher"
-                                               className="block text-sm font-medium text-gray-700">教師：</label>
-                                        <input type="text" id="teacher"
-                                               className="mt-1 block w-full py-2 px-3 border rounded-md"
-                                               placeholder="教師代碼"/>
-                                    </div>
+
                                     <div className="flex-1">
                                         <label htmlFor="course"
                                                className="block text-sm font-medium text-gray-700">課程：</label>
@@ -744,13 +765,7 @@ const Ntunhssu = () => {
                                                className="mt-1 block w-full py-2 px-3 border rounded-md"
                                                placeholder="課程代碼"/>
                                     </div>
-                                    <div className="flex-1">
-                                        <label htmlFor="class"
-                                               className="block text-sm font-medium text-gray-700">班級：</label>
-                                        <input type="text" id="class"
-                                               className="mt-1 block w-full py-2 px-3 border rounded-md"
-                                               placeholder="班級名稱"/>
-                                    </div>
+
                                     <div className="flex-1">
                                         <label htmlFor="classroom"
                                                className="block text-sm font-medium text-gray-700">教室：</label>
@@ -784,6 +799,7 @@ const Ntunhssu = () => {
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">教室</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">星期</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">節次</th>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">年級</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">系所</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">操作</th>
 
@@ -802,6 +818,7 @@ const Ntunhssu = () => {
                                                 <td className="py-2 px-4">{result.Location}</td>
                                                 <td className="py-2 px-4">{result.Weekday}</td>
                                                 <td className="py-2 px-4">{result.ClassPeriods}</td>
+                                                <td className="py-2 px-4">{result.Grade}</td>
                                                 <td className="py-2 px-4">{departmentMapping[result.DepartmentCode] || result.DepartmentCode}</td>
                                                 <td className="py-2 px-4">
                                                     <button type="button" onClick={(e) => {

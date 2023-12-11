@@ -213,7 +213,7 @@ router.get('/search1', async (req, res) => {
         const pool = req.app.locals.pool;
 
         // Get query string parameters
-        const { Semester, MainInstructorName, SubjectCode, DepartmentCode, CoreCode, CourseTypeName,AcademicSystem ,Weekday,ClassPeriods} = req.query;
+        const { Semester, MainInstructorName, SubjectCode, DepartmentCode,Grade, CoreCode, CourseTypeName,AcademicSystem ,Weekday,ClassPeriods} = req.query;
 
         // Build SQL query string
         let queryString = 'SELECT * FROM Courses ';
@@ -233,10 +233,13 @@ router.get('/search1', async (req, res) => {
         if (DepartmentCode) {
             conditions.push(`DepartmentCode LIKE '%${DepartmentCode}%'`);
         }
+        if (Grade) {
+            conditions.push(`Grade LIKE '%${Grade}%'`);
+        }
+
         if (CoreCode) {
             conditions.push(`CoreCode LIKE '%${CoreCode}%'`);
         }
-
         if (Weekday) {
             // Support multiple values for SubjectCode
             const Weekdays = Array.isArray(Weekday) ? Weekday : [Weekday];
@@ -308,7 +311,7 @@ router.get('/departments', async (req, res) => {
 
         // 动态构建参数列表和查询字符串
         const params = academicSystems.map((system, index) => `@system${index}`);
-        let query = `SELECT DepartmentName FROM AcademicDepartments WHERE AcademicSystem IN (${params.join(', ')})`;
+        let query = `SELECT DepartmentName,AcademicSystemCode FROM AcademicDepartments WHERE AcademicSystem IN (${params.join(', ')})`;
 
         const request = pool.request();
 
