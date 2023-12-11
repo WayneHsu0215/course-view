@@ -100,6 +100,7 @@ const departmentMapping = {
 const Ntunhssu = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen1, setIsModalOpen1] = useState(false);
+    const [isModalOpen2, setIsModalOpen2] = useState(false);
     const SESSIONS = Object.freeze({
         1: {name: '1', time: ['08:10', '09:00']},
         2: {name: '2', time: ['09:10', '10:00']},
@@ -500,6 +501,51 @@ const Ntunhssu = () => {
     };
 
 
+    const [selectedLocation, setSelectedLocation] = useState('');
+    const [locationImage, setLocationImage] = useState('');
+
+// Mapping or function to determine the image based on location's first letter
+    const [locationsWithImages, setLocationsWithImages] = useState([]);
+
+    // Function to get image based on the location's first letter
+    const getImageForLocation = (location) => {
+        const firstLetter = location.charAt(0).toUpperCase();
+        switch(firstLetter) {
+            case 'F': return 'cy.png'; // Replace with actual image paths
+            case 'G': return 'cy.png'; // Replace with actual image paths
+            // Add other cases as needed
+            default: return 'default_image.jpg';
+        }
+    };
+
+    // Function to fetch data from the API
+    const fetchData = async () => {
+        try {
+            const response = await fetch('/api/search1');
+            const data = await response.json();
+            const locationsWithImages = data.map(item => ({
+                ...item,
+                image: getImageForLocation(item.Location)
+            }));
+            setLocationsWithImages(locationsWithImages);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleSelectLocation = (location) => {
+        setSelectedLocation(location);
+        const image = getImageForLocation(location);
+        setLocationImage(image);
+        setIsModalOpen2(true);
+    };
+
+
+
     return (
         <div className="bg-gray-100 min-h-screen ">
             <Helmet>
@@ -835,7 +881,13 @@ const Ntunhssu = () => {
                                                 <td className="py-2 px-4">{result.CourseTypeName}</td>
                                                 <td className="py-2 px-4">{result.SubjectNameChinese}</td>
                                                 <td className="py-2 px-4">{result.Credits}</td>
-                                                <td className="py-2 px-4">{result.Location}</td>
+                                                <td className="py-2 px-4"> <button
+                                                    type="button"
+                                                    onClick={() => handleSelectLocation(result.Location)}
+                                                    className="text-blue-500 hover:text-blue-800">
+                                                    {result.Location}
+                                                </button>
+                                                </td>
                                                 <td className="py-2 px-4">{result.Weekday}</td>
                                                 <td className="py-2 px-4">{result.ClassPeriods}</td>
                                                 <td className="py-2 px-4">{result.Grade}</td>
@@ -927,6 +979,16 @@ const Ntunhssu = () => {
                             <p className="text-lg font-bold mb-4">姓名：{selectedTeacher}</p>
                             {/* You can add more details here if you have */}
                         </div>
+                    </div>
+                </div>
+            </Modal>
+
+            <Modal isOpen={isModalOpen2} onClose={() => setIsModalOpen2(false)}>
+                <div className="flex flex-col items-center">
+                    <h1 className="text-2xl font-bold mb-4">Location Details</h1>
+                    <div>
+                        <img src={locationImage} alt="Location" style={{ width: '200px', height: '200px' }} />
+                        <p>Selected Location: {selectedLocation}</p>
                     </div>
                 </div>
             </Modal>
