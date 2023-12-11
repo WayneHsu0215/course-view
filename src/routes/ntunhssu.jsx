@@ -99,6 +99,7 @@ const departmentMapping = {
 
 const Ntunhssu = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen1, setIsModalOpen1] = useState(false);
     const SESSIONS = Object.freeze({
         1: {name: '1', time: ['08:10', '09:00']},
         2: {name: '2', time: ['09:10', '10:00']},
@@ -488,6 +489,17 @@ const Ntunhssu = () => {
     const handleSemesterChange = (event) => {
         setSelectedSemester(event.target.value);
     };
+
+
+
+    const [selectedTeacher, setSelectedTeacher] = useState('');
+
+    const handleSelectTeacher = (teacherName) => {
+        setSelectedTeacher(teacherName);
+        setIsModalOpen1(true);
+    };
+
+
     return (
         <div className="bg-gray-100 min-h-screen ">
             <Helmet>
@@ -815,7 +827,11 @@ const Ntunhssu = () => {
                                         {searchResults.map((result, index) => (
                                             <tr className="text-center border" key={index}>
                                                 <td className="py-2 px-4">{result.Semester}</td>
-                                                <td className="py-2 px-4">{result.MainInstructorName}</td>
+                                                <td className="py-2 px-4">
+                                                    <button type="button" onClick={() => handleSelectTeacher(result.MainInstructorName)} className="text-blue-500 hover:text-blue-800">
+                                                        {result.MainInstructorName}
+                                                    </button>
+                                                </td>
                                                 <td className="py-2 px-4">{result.CourseTypeName}</td>
                                                 <td className="py-2 px-4">{result.SubjectNameChinese}</td>
                                                 <td className="py-2 px-4">{result.Credits}</td>
@@ -897,6 +913,25 @@ const Ntunhssu = () => {
                     </div>
                 </div>
             </Modal>
+
+            <Modal isOpen={isModalOpen1} onClose={() => setIsModalOpen1(false)}>
+                <div className="flex flex-col items-center">
+                    <h1 className="text-2xl font-bold mb-4">教師資訊<Icon className="inline mx-2 text-2xl" icon="svg-spinners:blocks-shuffle-3" /></h1>
+                    <div className="flex items-center">
+                        {/* Image container */}
+                        <div className="mr-4">
+                            <img src="cy.png" alt="Teacher" style={{ width: '150px', height: '200px' }} />
+                        </div>
+                        {/* Text container */}
+                        <div>
+                            <p className="text-lg font-bold mb-4">姓名：{selectedTeacher}</p>
+                            {/* You can add more details here if you have */}
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+
+
 
             <Modal isOpen={isExportModalOpen} onClose={handleCloseExportModal}>
                 <div className="w-[21cm] h-[29.7cm] mx-auto h-full " style={{ maxHeight: '400px', overflowY: 'auto' }}>
