@@ -215,7 +215,7 @@ router.get('/search1', async (req, res) => {
         const pool = req.app.locals.pool;
 
         // Get query string parameters
-        const { Location,Semester, MainInstructorName, SubjectCode, DepartmentCode,Grade, CoreCode, CourseTypeName,AcademicSystem ,Weekday,ClassPeriods} = req.query;
+        const {Location,Semester, MainInstructorName, SubjectCode, DepartmentCode,Grade, CoreCode, CourseTypeName,AcademicSystem ,Weekday,ClassPeriods} = req.query;
 
         // Build SQL query string
         let queryString = 'SELECT * FROM Courses ';
@@ -244,6 +244,7 @@ router.get('/search1', async (req, res) => {
         if (CoreCode) {
             conditions.push(`CoreCode LIKE '%${CoreCode}%'`);
         }
+
         if (Weekday) {
             // Support multiple values for SubjectCode
             const Weekdays = Array.isArray(Weekday) ? Weekday : [Weekday];

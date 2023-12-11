@@ -364,6 +364,7 @@ const Ntunhssu = () => {
             // Get values from the dropdowns and input fields
             const courseType = document.getElementById('courseType')?.value;
             const SubjectCode = document.getElementById('course')?.value;
+            const Semester = document.getElementById('semester')?.value; // Get the selected semester value
 
             // Construct the query parameters based on the selected checkboxes and input values
             const weekdayQueryParam = selectedWeekdays.length > 0 ? selectedWeekdays.map(day => `Weekday=${day}`).join('&') : '';
@@ -376,8 +377,10 @@ const Ntunhssu = () => {
             const departmentCodeQueryParam = selectedDepartment ? `DepartmentCode=${selectedDepartment}` : '';
             const classroomCode = document.getElementById('classroom')?.value;
             const classroomCodeQueryParam = classroomCode ? `Location=${classroomCode}` : '';
+            const semesterQueryParam = Semester ? `Semester=${Semester}` : '';
+
             // Combine all query parameters
-            let queryParams = [classroomCodeQueryParam,departmentCodeQueryParam,weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
+            let queryParams = [ semesterQueryParam,classroomCodeQueryParam,departmentCodeQueryParam,weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
                 .filter(param => param) // Remove empty strings
                 .join('&');
 
@@ -480,8 +483,11 @@ const Ntunhssu = () => {
     };
 
 
+    const [selectedSemester, setSelectedSemester] = useState('');
 
-
+    const handleSemesterChange = (event) => {
+        setSelectedSemester(event.target.value);
+    };
     return (
         <div className="bg-gray-100 min-h-screen ">
             <Helmet>
@@ -550,9 +556,12 @@ const Ntunhssu = () => {
                     <form className="space-y-4">
                         <div className="w-2/5">
                             <label htmlFor="semester" className="block text-sm font-medium text-gray-700">學期：</label>
-                            <select id="semester" className="mt-1 block w-full py-2 px-3 border rounded-md">
-                                <option value="112上">112學年度上學期</option>
-                                <option value="111下">111學年度下學期</option>
+                            <select id="semester" className="mt-1 block w-full py-2 px-3 border rounded-md"
+                            >
+                                <option value="">請選擇</option>
+                                <option value="1122">112學年度下學期</option>
+                                <option value="1121">112學年度上學期</option>
+                                <option value="1112">111學年度下學期</option>
                             </select>
                         </div>
 
