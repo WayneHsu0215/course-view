@@ -374,9 +374,10 @@ const Ntunhssu = () => {
             const gradeQueryParam = selectedGrade ? `Grade=${selectedGrade}` : '';
             const selectedDepartment = document.getElementById('department')?.value;
             const departmentCodeQueryParam = selectedDepartment ? `DepartmentCode=${selectedDepartment}` : '';
-
+            const classroomCode = document.getElementById('classroom')?.value;
+            const classroomCodeQueryParam = classroomCode ? `Location=${classroomCode}` : '';
             // Combine all query parameters
-            let queryParams = [departmentCodeQueryParam,weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
+            let queryParams = [classroomCodeQueryParam,departmentCodeQueryParam,weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
                 .filter(param => param) // Remove empty strings
                 .join('&');
 
@@ -486,15 +487,15 @@ const Ntunhssu = () => {
             <Helmet>
                 <title>課程查詢系統</title>
             </Helmet>
-            <div>
-                匯入Excel
-                <input type="file" onChange={handleFileUpload} />
-                {uploadProgress > 0 && (
-                    <div style={{ width: '100%', backgroundColor: '#ddd' }}>
-                        <div style={{ height: '10px', width: `${uploadProgress}%`, backgroundColor: 'green' }}></div>
-                    </div>
-                )}
-            </div>
+            {/*<div>*/}
+            {/*    匯入Excel*/}
+            {/*    <input type="file" onChange={handleFileUpload} />*/}
+            {/*    {uploadProgress > 0 && (*/}
+            {/*        <div style={{ width: '100%', backgroundColor: '#ddd' }}>*/}
+            {/*            <div style={{ height: '10px', width: `${uploadProgress}%`, backgroundColor: 'green' }}></div>*/}
+            {/*        </div>*/}
+            {/*    )}*/}
+            {/*</div>*/}
             <div className="flex">
                 <div className=" p-6 rounded  w-11/12 mx-auto">
                     <ul className="flex  mb-3 ">
@@ -782,16 +783,13 @@ const Ntunhssu = () => {
                         </button>
                         <div className="mt-4 text">
 
-
-                            <div  style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                                {/* 這裡顯示查詢結果 */}
-                                <header className="text-2xl font-bold text-center mb-4">查詢結果</header>
-                                {searchResults.length > 0 ? (
-                                    <table className="min-w-full  bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto ">
+                            {searchResults.length > 0 ? (
+                                <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                    <header className="text-2xl font-bold text-center mb-4">查詢結果</header>
+                                    <table className="min-w-full bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto">
                                         <thead className="sticky top-0 bg-gray-200">
-                                        <tr >
-                                            {/* 根據您的數據結構調整表頭 */}
-                                            <th className="py-2 px-4 border-b  border-gray-300 bg-gray-200">學年度</th>
+                                        <tr>
+                                            <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">學年度</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">教授老師</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">課別</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">課程名稱</th>
@@ -802,15 +800,12 @@ const Ntunhssu = () => {
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">年級</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">系所</th>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">操作</th>
-
-
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {searchResults.map((result, index) => (
                                             <tr className="text-center border" key={index}>
-                                                {/* 根據您的數據結構調整顯示的字段 */}
-                                                <td className="py-2  px-4">{result.Semester}</td>
+                                                <td className="py-2 px-4">{result.Semester}</td>
                                                 <td className="py-2 px-4">{result.MainInstructorName}</td>
                                                 <td className="py-2 px-4">{result.CourseTypeName}</td>
                                                 <td className="py-2 px-4">{result.SubjectNameChinese}</td>
@@ -821,22 +816,17 @@ const Ntunhssu = () => {
                                                 <td className="py-2 px-4">{result.Grade}</td>
                                                 <td className="py-2 px-4">{departmentMapping[result.DepartmentCode] || result.DepartmentCode}</td>
                                                 <td className="py-2 px-4">
-                                                    <button type="button" onClick={(e) => {
-                                                        e.preventDefault();
-                                                        handleSelectCourse(result);
-                                                    }} className="text-blue-500 hover:text-blue-800">選擇課程</button>
+                                                    <button type="button" onClick={() => handleSelectCourse(result)} className="text-blue-500 hover:text-blue-800">選擇課程</button>
                                                 </td>
                                             </tr>
-
                                         ))}
                                         </tbody>
                                     </table>
+                                </div>
+                            ) : (
+                                <p className="text-center text-red-600"></p>
+                            )}
 
-
-                                ) : (
-                                    <p>No results found</p>
-                                )}
-                            </div>
                         </div>
                     </form>
                     <div className="w-full flex justify-center mt-4 overflow-x-auto">

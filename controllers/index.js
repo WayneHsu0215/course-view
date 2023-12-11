@@ -185,6 +185,8 @@ router.get('/search', async (req, res) => {
         }
         if (CourseTypeName) {
             conditions.push(`CourseTypeName LIKE '%${CourseTypeName}%'`);
+        }if (Location) {
+            conditions.push(`Location LIKE '%${Location}%'`);
         }
 
 
@@ -213,7 +215,7 @@ router.get('/search1', async (req, res) => {
         const pool = req.app.locals.pool;
 
         // Get query string parameters
-        const { Semester, MainInstructorName, SubjectCode, DepartmentCode,Grade, CoreCode, CourseTypeName,AcademicSystem ,Weekday,ClassPeriods} = req.query;
+        const { Location,Semester, MainInstructorName, SubjectCode, DepartmentCode,Grade, CoreCode, CourseTypeName,AcademicSystem ,Weekday,ClassPeriods} = req.query;
 
         // Build SQL query string
         let queryString = 'SELECT * FROM Courses ';
@@ -235,6 +237,8 @@ router.get('/search1', async (req, res) => {
         }
         if (Grade) {
             conditions.push(`Grade LIKE '%${Grade}%'`);
+        }if (Location) {
+            conditions.push(`Location LIKE '%${Location}%'`);
         }
 
         if (CoreCode) {

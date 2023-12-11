@@ -27,7 +27,7 @@ CREATE TABLE Courses (
                          ClassGroup NVARCHAR(50),
                          SubjectNameChinese NVARCHAR(500),
                          SubjectNameEnglish NVARCHAR(500),
-                         InstructorName NVARCHAR(100),
+                         InstructorName NVARCHAR(200),
                          NumberOfStudents  NVARCHAR(50),
                          NumberOfMaleStudents  NVARCHAR(50),
                          NumberOfFemaleStudents  NVARCHAR(50),
@@ -124,3 +124,4 @@ VALUES
     ('33162', '碩士班', '生死與健康心理諮商系碩士班諮商心理組'),
     ('41140', '四技', '高齡健康暨運動保健技優專班'),
     ('42140', '四技', '智慧健康科技技優專班');
+
