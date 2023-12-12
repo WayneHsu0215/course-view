@@ -5,6 +5,7 @@ const router = Router();
 import express from 'express';
 import multer from 'multer';
 import xlsx from 'xlsx';
+import bcrypt from "bcrypt";
 
 // 设置 multer 用于文件上传
 const upload = multer({ dest: 'uploads/' });
@@ -351,6 +352,60 @@ router.get('/AllDepartments', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+
+router.get('/check-auth', (req, res) => {
+    res.json({ loggedIn: !!(req.session && req.session.user) });
+});
+
+router.post('/login', async (req, res) => {
+    try {
+        const {AccID, password} = req.body;
+        const pool = req.app.locals.pool;
+        const query = `SELECT AccID, password FROM Account WHERE AccID = @username;`;
+
+        const result = await pool.request()
+            .input('username', AccID)
+            .query(query);
+        console.log(result);
+        if (result.recordset.length > 0) {
+            const isValid = await bcrypt.compare(password, result.recordset[0].password)
+            if (isValid) {
+                req.session.user = {AccID: AccID};
+                res.json({success: true, message: `Login successful ${AccID}}`});
+            } else {
+                res.status(400).json({success: false, message: 'Missing Username or Password'});
+            }
+        } else {
+            res.status(401).json({success: false, message: 'Unauthorized'});
+        }
+    } catch (err) {
+        console.error('Error during login:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+router.post('/logout', async (req, res) => {
+    try {
+        if (req.session.user) {
+            req.session.destroy((err) => {
+                if (err) {
+                    console.error('Error destroying session:', err);
+                    res.status(500).json({success: false, message: 'Internal Server Error' });
+                } else {
+                    res.status(200).json({success: true,message:'logout成功'});
+                }
+            });
+        } else {
+            // 用户未登录，返回未经授权的状态码
+            res.status(401).json({ message: 'Unauthorized' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+
 export default router;
 
 

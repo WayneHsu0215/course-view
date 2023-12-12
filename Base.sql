@@ -125,3 +125,16 @@ VALUES
     ('41140', '四技', '高齡健康暨運動保健技優專班'),
     ('42140', '四技', '智慧健康科技技優專班');
 
+
+CREATE TABLE Account
+(
+    ID int PRIMARY KEY,  -- 欄位id
+    AccID varchar(10) UNIQUE,  -- 帳號
+    Password varchar(100), -- 密碼
+    AccType varchar(3), -- 帳戶類型
+    UP_Date datetime,   -- 更新時間
+    UP_User varchar(20) -- 更新人員
+);
+INSERT INTO ACCOUNT (ID,AccID, Password, AccType, UP_Date, UP_User)
+VALUES
+    (1,'ntunhsEmp', '$2b$10$6O3JzrnRPLej.XfqyW0O2u7rwFnra2M9jRVEU1aQL/QiReXoLI6BK', 'B01', getdate(), '0')
