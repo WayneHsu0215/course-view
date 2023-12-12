@@ -139,6 +139,7 @@ const Login = () => {
                                               className="absolute right-0 top-3 mr-2 "/>
                                     </div>
                                     <button type="submit" className="bg-blue-500 text-white w-full rounded-md px-5 py-3 hover:bg-blue-600 mt-4 font-semibold font-mono text-xl" onClick={handleLogin}>登入</button>
+                                    <p className="text-center text-sm">ntunhsEmp</p>
                                 </div>
                             </form>
                         </div>
