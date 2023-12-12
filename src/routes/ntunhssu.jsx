@@ -101,6 +101,7 @@ const Ntunhssu = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [isModalOpen3, setIsModalOpen3] = useState(false);
     const SESSIONS = Object.freeze({
         1: {name: '1', time: ['08:10', '09:00']},
         2: {name: '2', time: ['09:10', '10:00']},
@@ -511,10 +512,12 @@ const Ntunhssu = () => {
     const getImageForLocation = (location) => {
         const firstLetter = location.charAt(0).toUpperCase();
         switch(firstLetter) {
-            case 'F': return 'cy.png'; // Replace with actual image paths
-            case 'G': return 'cy.png'; // Replace with actual image paths
+            case 'F': return 'F.png'; // Replace with actual image paths
+            case 'G': return 'G.png'; // Replace with actual image paths
+            case 'B': return 'B.png'; // Replace with actual image paths
+            case 'S': return 'S.png'; // Replace with actual image paths
             // Add other cases as needed
-            default: return 'default_image.jpg';
+            default: return 'A.jpg';
         }
     };
 
@@ -546,6 +549,53 @@ const Ntunhssu = () => {
 
 
 
+    const [selectedCourses, setSelectedCourses] = useState(null);
+    const [selectedAcademicSystem, setSelectedAcademicSystem] = useState(null);
+    const [selectedSubjectCode, setSelectedSubjectCode] = useState(null);
+    const [selectedDepartmentCode, setSelectedDepartmentCode] = useState(null);
+    const [selectedCoreCode, setSelectedCoreCode] = useState(null);
+    const [selectedGrade1, setSelectedGrade1] = useState(null);
+    const [selectedClassGroup, setSelectedClassGroup] = useState(null);
+    const [selectedSubjectNameEnglish, setSelectedSubjectNameEnglish] = useState(null);
+    const [selectedInstructorName, setSelectedInstructorName] = useState(null);
+    const [selectedNumberOfStudents, setSelectedNumberOfStudents] = useState(null);
+    const [selectedCredits, setSelectedCredits] = useState(null);
+    const [selectedWeeksOfClasses, setSelectedWeeksOfClasses] = useState(null);
+    const [selectedCourseTypeName, setSelectedCourseTypeName] = useState(null);
+    const [selectedWeekday, setSelectedWeekday] = useState(null);
+    const [selectedClassPeriods, setSelectedClassPeriods] = useState(null);
+    const [selectedTimetableNotes, setSelectedTimetableNotes] = useState(null);
+    const [selectedCourseSummaryChinese, setSelectedCourseSummaryChinese] = useState(null);
+    const [selectedCourseSummaryEnglish, setSelectedCourseSummaryEnglish] = useState(null);
+    const [selectedMappedDepartment, setSelectedMappedDepartment] = useState(null);
+    const fetchStudentDetails1 = async (Courses,teacherName,AcademicSystem,SubjectCode,DepartmentCode,CoreCode,Grade,ClassGroup,SubjectNameEnglish,
+                                        InstructorName,NumberOfStudents,Credits,WeeksOfClasses,CourseTypeName,Location,Weekday,ClassPeriods,TimetableNotes
+                                        ,CourseSummaryChinese,  CourseSummaryEnglish,MappedDepartment) => {
+        setSelectedCourses(Courses);
+        setSelectedTeacher(teacherName);
+        setSelectedAcademicSystem(AcademicSystem);
+        setSelectedSubjectCode(SubjectCode);
+        setSelectedDepartmentCode(DepartmentCode);
+        setSelectedCoreCode(CoreCode);
+        setSelectedGrade1(Grade);
+        setSelectedClassGroup(ClassGroup);
+        setSelectedSubjectNameEnglish(SubjectNameEnglish);
+        setSelectedInstructorName(InstructorName);
+        setSelectedNumberOfStudents(NumberOfStudents);
+        setSelectedCredits(Credits);
+        setSelectedWeeksOfClasses(WeeksOfClasses);
+        setSelectedCourseTypeName(CourseTypeName);
+        setSelectedLocation(Location);
+        setSelectedWeekday(Weekday);
+        setSelectedClassPeriods(ClassPeriods);
+        setSelectedTimetableNotes(TimetableNotes);
+        setSelectedCourseSummaryChinese(CourseSummaryChinese);
+        setSelectedCourseSummaryEnglish(CourseSummaryEnglish);
+        setSelectedMappedDepartment(MappedDepartment);
+        setIsModalOpen3(true);
+    };
+
+
     return (
         <div className="bg-gray-100 min-h-screen ">
             <Helmet>
@@ -561,31 +611,31 @@ const Ntunhssu = () => {
             {/*    )}*/}
             {/*</div>*/}
             <div className="flex">
-                <div className=" p-6 rounded  w-11/12 mx-auto">
-                    <ul className="flex  mb-3 ">
-                        <li className="-mb-px mr-1">
-                            <a className="bg-white inline-block border-l border-t border-r rounded-t py-1 px-2 text-green-500 font-semibold"
-                               href="/"><Icon className="inline mx-2 text-2xl " icon="line-md:cloud-print-outline-loop" />課程查詢系統</a>
+                <div className=" px-6 pb-6 pt-4 rounded  w-11/12 mx-auto">
+                    <ul className="flex  mb-6 ">
+                        <li className="-mb-px mr-1 ">
+                            <a className=" inline-block rounded-t py-1 px-2 text-green-500 font-semibold text-xl"
+                               href="/"><Icon className="inline mx-2 text-3xl " icon="line-md:cloud-print-outline-loop" />課程查詢系統</a>
                         </li>
                         <li className="mr-1">
                             <a
-                                className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
+                                className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold text-xl "
                                 href="https://system8.ntunhs.edu.tw/myNTUNHS_student/Modules/Main/Index_student.aspx?first=true"
                                 target="_blank"
-                                rel="noopener noreferrer">e-protfolio 學習歷程<Icon className="inline mx-2 text-2xl "
-                                                                                    icon="line-md:person-search-twotone" />
+                                rel="noopener noreferrer"><Icon className="inline mx-2 text-3xl "
+                                                                icon="line-md:person-search-twotone" />e-protfolio 學習歷程
                             </a>
                         </li>
                         <li className="mr-1">
                             <a
-                                className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold"
+                                className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold text-xl"
                                 href="https://system16.ntunhs.edu.tw/myNTUNHS_coc/Modules/Main/Index_COC.aspx"
                                 target="_blank"
                                 rel="noopener noreferrer">選課系統</a>
                         </li>
                     </ul>
                     <div className="flex">
-                        <h1 className="text-2xl font-bold mb-4">國立臺北護理健康大學 課程查詢系統<Icon
+                        <h1 className="text-3xl font-bold mb-4">國立臺北護理健康大學 課程查詢系統<Icon
                             className="inline mx-2 text-2xl " icon="line-md:text-box" /></h1>
 
                         <button type="button"
@@ -879,7 +929,18 @@ const Ntunhssu = () => {
                                                     </button>
                                                 </td>
                                                 <td className="py-2 px-4">{result.CourseTypeName}</td>
-                                                <td className="py-2 px-4">{result.SubjectNameChinese}</td>
+                                                <td className="py-2 px-4">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => fetchStudentDetails1(result.SubjectNameChinese , result.MainInstructorName,result.AcademicSystem ,
+                                                            result.SubjectCode , result.DepartmentCode , result.CoreCode , result.Grade , result.ClassGroup , result.SubjectNameEnglish
+                                                            , result.MainInstructorName , result.NumberOfStudents , result.Credits , result.WeeksOfClasses , result.CourseTypeName
+                                                            , result.Location , result.Weekday , result.ClassPeriods , result.TimetableNotes , result.CourseSummaryChinese , result.CourseSummaryEnglish
+                                                            , departmentMapping[result.DepartmentCode] || result.DepartmentCode)}
+                                                        className="text-blue-500 hover:text-blue-800">
+                                                        {result.SubjectNameChinese}
+                                                    </button>
+                                                </td>
                                                 <td className="py-2 px-4">{result.Credits}</td>
                                                 <td className="py-2 px-4"> <button
                                                     type="button"
@@ -961,7 +1022,7 @@ const Ntunhssu = () => {
                         <p className="text-lg text-red-600 font-bold mb-4">※本查詢執行速度比舊的快，別用舊系統了 。</p>
                         <p className="text-lg font-bold mb-4">※所有欄位皆提供模糊查詢，請安心使用。</p>
                         <p className="text-lg font-bold mb-4">※選課日程及注意事項等請詳閱教務處網站選課公告</p>
-                        <p className="text-lg font-bold mb-4 flex justify-center">&#8203;``【oaicite:0】``&#8203;</p>
+
                     </div>
                 </div>
             </Modal>
@@ -985,12 +1046,92 @@ const Ntunhssu = () => {
 
             <Modal isOpen={isModalOpen2} onClose={() => setIsModalOpen2(false)}>
                 <div className="flex flex-col items-center">
-                    <h1 className="text-2xl font-bold mb-4">Location Details</h1>
+                    <h1 className="text-2xl font-bold mb-4">教室位置</h1>
                     <div>
-                        <img src={locationImage} alt="Location" style={{ width: '200px', height: '200px' }} />
-                        <p>Selected Location: {selectedLocation}</p>
+                        <img src={locationImage} alt="Location" style={{ width: '600px', height: '450px' }} />
                     </div>
                 </div>
+            </Modal>
+            <Modal isOpen={isModalOpen3} onClose={() => setIsModalOpen3(false)}>
+                <div>
+                    <h1 className="text-2xl mb-4 text-center font-bold">課程詳細資料</h1>
+                    <table className="table-auto ">
+                        <tbody >
+                        <tr>
+                            <td className="text-lg font-bold  pl-7 bg-gray-200 border border-gray-400">課程名稱：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedCourses}</td>
+                            <td className="text-lg font-bold pl-7  bg-gray-200 border border-gray-400">課程名稱(英文)：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400  ">{selectedSubjectNameEnglish}</td>
+                        </tr>
+                        <tr>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">系所：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedMappedDepartment}</td>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">課別名稱：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedCourseTypeName}</td>
+                        </tr>
+                        <tr>
+                            <td className="text-lg font-bold pl-7   bg-gray-200  border border-gray-400">科目代碼：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedSubjectCode}</td>
+                            <td className="text-lg font-bold pl-7   bg-gray-200  border border-gray-400">系所代碼：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedDepartmentCode}</td>
+                        </tr>
+                        <tr>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">核心四碼：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedCoreCode}</td>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">年級：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedGrade1}</td>
+                        </tr>
+                        <tr>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">上課般組：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedClassGroup}</td>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">授課教師姓名：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedInstructorName}</td>
+                        </tr>
+                        <tr>
+
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">上課人數：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedNumberOfStudents}</td>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">學分數：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedCredits}</td>
+                        </tr>
+                        <tr>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">上課周次：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedWeeksOfClasses}</td>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">上課星期：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedWeekday}</td>
+                        </tr>
+                        <tr>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">上課地點：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedLocation}</td>
+                            <td className="text-lg font-bold pl-7   bg-gray-200 border border-gray-400">上課節次：</td>
+                            <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedClassPeriods}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="4">
+                                <div>
+                                    <div className="mt-8 border border-gray-400" >
+                                        <p className="text-lg font-bold mb-4 pl-7 bg-gray-200 ">備註：</p>
+                                        <p className="text-lg mb-4 max-w-5xl pl-7">{selectedTimetableNotes}</p>
+                                    </div>
+
+                                    <div className=" border border-gray-400">
+                                        <p className="text-lg font-bold mb-4 pl-7  bg-gray-200 border border-gray-400">課程摘要：</p>
+                                        <p className="text-lg mb-4 max-w-5xl pl-7">{selectedCourseSummaryChinese}</p>
+                                    </div>
+                                    {/*<div className="mb-8 border  border-gray-400">*/}
+                                    {/*    <p className="text-lg font-bold mb-4 pl-7    bg-gray-200 border border-gray-400">課程摘要(英文)：</p>*/}
+                                    {/*    <p className="text-lg mb-4 max-w-5xl pl-7">{selectedCourseSummaryEnglish}</p>*/}
+                                    {/*</div>*/}
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+
+                </div>
+
             </Modal>
 
 
