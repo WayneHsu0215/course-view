@@ -1,12 +1,12 @@
 import {Helmet} from 'react-helmet';
-import React, {useEffect, useState,useRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {Icon} from '@iconify/react';
 import Modal from "./Modal.jsx";
-import {ToastContainer,toast} from "react-toastify";
+import {ToastContainer, toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import html2canvas from "html2canvas";
 import {jsPDF} from "jspdf";
-
+import {Link} from 'react-router-dom';
 
 const daysOfWeek = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
 
@@ -22,7 +22,6 @@ const timeSlots = [
     '第9節',
     '第10節',
 ];
-
 
 
 const initialSchedule = daysOfWeek.reduce((schedule, day) => {
@@ -121,23 +120,23 @@ const Ntunhssu = () => {
     });
 
     const weekdays = [
-        { value: "1", name: "星期一" },
-        { value: "2", name: "星期二" },
-        { value: "3", name: "星期三" },
-        { value: "4", name: "星期四" },
-        { value: "5", name: "星期五" },
-        { value: "6", name: "星期六" },
-        { value: "7", name: "星期日" },
+        {value: "1", name: "星期一"},
+        {value: "2", name: "星期二"},
+        {value: "3", name: "星期三"},
+        {value: "4", name: "星期四"},
+        {value: "5", name: "星期五"},
+        {value: "6", name: "星期六"},
+        {value: "7", name: "星期日"},
     ];
 
     const grades = [
-        { value: "1", name: "一年級" },
-        { value: "2", name: "二年級" },
-        { value: "3", name: "三年級" },
-        { value: "4", name: "四年級" },
-        { value: "5", name: "五年級" },
-    ];;
-
+        {value: "1", name: "一年級"},
+        {value: "2", name: "二年級"},
+        {value: "3", name: "三年級"},
+        {value: "4", name: "四年級"},
+        {value: "5", name: "五年級"},
+    ];
+    ;
 
 
     const [schedule, setSchedule] = useState(initialSchedule);
@@ -150,7 +149,6 @@ const Ntunhssu = () => {
 
     const systems = ['二技', '二技(三年)', '四技', '學士後多元專長', '碩士班', '博士班', '學士後學位學程', '學士後系'];
     const [selectedSystems, setSelectedSystems] = useState([]);
-
 
 
     const [isOpen, setIsOpen] = useState({
@@ -182,7 +180,6 @@ const Ntunhssu = () => {
     const [DepartmentCode, setDepartmentCode] = useState('');
     const [CoreCode, setCoreCode] = useState('');
     const [selectedGrade, setSelectedGrade] = useState('');
-
 
 
     const handleSearch = async () => {
@@ -281,11 +278,11 @@ const Ntunhssu = () => {
         }
 
         setSchedule(prevSchedule => {
-            const newSchedule = { ...prevSchedule };
+            const newSchedule = {...prevSchedule};
 
             classPeriodsArray.forEach(period => {
                 const periodIndex = period - 1;
-                newSchedule[weekdayString][periodIndex] = { course: course.SubjectNameChinese, credits: course.Credits };
+                newSchedule[weekdayString][periodIndex] = {course: course.SubjectNameChinese, credits: course.Credits};
 
             });
             toast(`已選擇課程：${course.SubjectNameChinese}`);
@@ -298,7 +295,7 @@ const Ntunhssu = () => {
 
 // Function to handle checkbox change
     const handleCheckboxChange = (e) => {
-        const { value } = e.target;
+        const {value} = e.target;
         // Check if the value is already in the selectedWeekdays array
         if (selectedWeekdays.includes(value)) {
             // If it is, remove it
@@ -309,7 +306,7 @@ const Ntunhssu = () => {
         }
     };
     const handlePeriodCheckboxChange = (e) => {
-        const { value } = e.target;
+        const {value} = e.target;
         // Check if the value is already in the selectedPeriods array
         if (selectedPeriods.includes(value)) {
             // If it is, remove it
@@ -324,7 +321,15 @@ const Ntunhssu = () => {
     const [departments, setDepartments] = useState([]);
 
 
-
+    const weekdayChineseMap = {
+        '1': '一',
+        '2': '二',
+        '3': '三',
+        '4': '四',
+        '5': '五',
+        '6': '六',
+        '7': '日',
+    };
 
     const onSystemCheckboxChange = async (e) => {
         const selectedSystem = e.target.value;
@@ -388,12 +393,12 @@ const Ntunhssu = () => {
 
 
             // Combine all query parameters
-            let queryParams = [ semesterQueryParam,courseCategoriesQueryParam,classroomCodeQueryParam,departmentCodeQueryParam,weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
+            let queryParams = [semesterQueryParam, courseCategoriesQueryParam, classroomCodeQueryParam, departmentCodeQueryParam, weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
                 .filter(param => param) // Remove empty strings
                 .join('&');
 
             if (!queryParams) {
-                toast.error('請至少選擇一種搜尋條件', { className: "font-semibold" });
+                toast.error('請至少選擇一種搜尋條件', {className: "font-semibold"});
                 return;
             }
 
@@ -403,9 +408,9 @@ const Ntunhssu = () => {
                 const data = await response.json();
                 if (data.length > 0) {
                     setSearchResults(data);
-                    toast(`已查詢符合資料${data.length}筆`, { className: "font-semibold" })
+                    toast(`已查詢符合資料${data.length}筆`, {className: "font-semibold"})
                 } else {
-                    toast.error('未查詢符合資料', { className: "font-semibold" });
+                    toast.error('未查詢符合資料', {className: "font-semibold"});
                 }
             } else {
                 console.error('Failed to fetch data');
@@ -425,7 +430,7 @@ const Ntunhssu = () => {
     };
 
     const handleSystemCheckboxChange = (e) => {
-        const { value, checked } = e.target;
+        const {value, checked} = e.target;
         setSelectedSystems(prev => {
             // 如果选中，则添加到数组
             if (checked) {
@@ -454,14 +459,13 @@ const Ntunhssu = () => {
 
         if (selectedSystems.length > 0) {
             // 有選擇學制時，添加學制到查詢參數並發送請求
-            const queryParams = new URLSearchParams({ academicSystem: selectedSystems.join(',') }).toString();
+            const queryParams = new URLSearchParams({academicSystem: selectedSystems.join(',')}).toString();
             fetchDepartments(`/api/departments?${queryParams}`);
         } else {
             // 沒有選擇學制時，發送請求獲取所有系所
             fetchDepartments('/api/AllDepartments');
         }
     }, [selectedSystems]);
-
 
 
     const [isExportModalOpen, setIsExportModalOpen] = useState(false); // 用于控制导出 Modal 的打开和关闭
@@ -477,7 +481,7 @@ const Ntunhssu = () => {
 
     const generatePDF = () => {
         const content = contentRef.current;
-        if(content) {
+        if (content) {
             html2canvas(content).then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF('p', 'mm', 'a4');
@@ -498,7 +502,6 @@ const Ntunhssu = () => {
     };
 
 
-
     const [selectedTeacher, setSelectedTeacher] = useState('');
 
     const handleSelectTeacher = (teacherName) => {
@@ -516,13 +519,18 @@ const Ntunhssu = () => {
     // Function to get image based on the location's first letter
     const getImageForLocation = (location) => {
         const firstLetter = location.charAt(0).toUpperCase();
-        switch(firstLetter) {
-            case 'F': return 'F.png'; // Replace with actual image paths
-            case 'G': return 'G.png'; // Replace with actual image paths
-            case 'B': return 'B.png'; // Replace with actual image paths
-            case 'S': return 'S.png'; // Replace with actual image paths
+        switch (firstLetter) {
+            case 'F':
+                return 'F.png'; // Replace with actual image paths
+            case 'G':
+                return 'G.png'; // Replace with actual image paths
+            case 'B':
+                return 'B.png'; // Replace with actual image paths
+            case 'S':
+                return 'S.png'; // Replace with actual image paths
             // Add other cases as needed
-            default: return 'A.jpg';
+            default:
+                return 'A.jpg';
         }
     };
 
@@ -583,9 +591,9 @@ const Ntunhssu = () => {
     const [selectedCourseSummaryEnglish, setSelectedCourseSummaryEnglish] = useState(null);
     const [selectedMappedDepartment, setSelectedMappedDepartment] = useState(null);
 
-    const fetchStudentDetails1 = async (Courses,teacherName,AcademicSystem,SubjectCode,DepartmentCode,CoreCode,Grade,ClassGroup,SubjectNameEnglish,
-                                        InstructorName,NumberOfStudents,Credits,WeeksOfClasses,CourseTypeName,Location,Weekday,ClassPeriods,TimetableNotes
-                                        ,CourseSummaryChinese,  CourseSummaryEnglish,MappedDepartment) => {
+    const fetchStudentDetails1 = async (Courses, teacherName, AcademicSystem, SubjectCode, DepartmentCode, CoreCode, Grade, ClassGroup, SubjectNameEnglish,
+                                        InstructorName, NumberOfStudents, Credits, WeeksOfClasses, CourseTypeName, Location, Weekday, ClassPeriods, TimetableNotes
+        , CourseSummaryChinese, CourseSummaryEnglish, MappedDepartment) => {
         setSelectedCourses(Courses);
         setSelectedTeacher(teacherName);
         setSelectedAcademicSystem(AcademicSystem);
@@ -621,12 +629,12 @@ const Ntunhssu = () => {
 
     const handleDeleteCourse = (day, periodIndex) => {
         setSchedule(prevSchedule => {
-            const newSchedule = { ...prevSchedule };
+            const newSchedule = {...prevSchedule};
             const courseToDelete = newSchedule[day][periodIndex].course;
 
             // Iterate through all periods of the day and remove the course
             newSchedule[day] = newSchedule[day].map(slot =>
-                slot.course === courseToDelete ? { course: "", credits: "" } : slot
+                slot.course === courseToDelete ? {course: "", credits: ""} : slot
             );
 
             return newSchedule;
@@ -635,7 +643,7 @@ const Ntunhssu = () => {
 
     return (
         <div className="bg-gray-100 min-h-screen ">
-            <ToastContainer />
+            <ToastContainer/>
 
             <Helmet>
                 <title>課程查詢系統</title>
@@ -651,18 +659,21 @@ const Ntunhssu = () => {
             {/*</div>*/}
             <div className="flex">
                 <div className=" px-6 pb-6 pt-4 rounded  w-11/12 mx-auto">
+
                     <ul className="flex  mb-6 ">
                         <li className="-mb-px mr-1 ">
                             <a className=" inline-block rounded-t py-1 px-2 text-green-500 font-semibold text-xl"
-                               href="/"><Icon className="inline mx-2 text-3xl " icon="line-md:cloud-print-outline-loop" />課程查詢系統</a>
+                               href="/"><Icon className="inline mx-2 text-3xl "
+                                              icon="line-md:cloud-print-outline-loop"/>課程查詢系統</a>
                         </li>
+
                         <li className="mr-1">
                             <a
                                 className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold text-xl "
                                 href="https://system8.ntunhs.edu.tw/myNTUNHS_student/Modules/Main/Index_student.aspx?first=true"
                                 target="_blank"
                                 rel="noopener noreferrer"><Icon className="inline mx-2 text-3xl "
-                                                                icon="line-md:person-search-twotone" />e-protfolio 學習歷程
+                                                                icon="line-md:person-search-twotone"/>e-protfolio 學習歷程
                             </a>
                         </li>
                         <li className="mr-1">
@@ -672,27 +683,25 @@ const Ntunhssu = () => {
                                 target="_blank"
                                 rel="noopener noreferrer">選課系統</a>
                         </li>
+
+
                     </ul>
                     <div className="flex">
                         <h1 className="text-3xl font-bold mb-4">國立臺北護理健康大學 課程查詢系統<Icon
-                            className="inline mx-2 text-2xl " icon="line-md:text-box" /></h1>
+                            className="inline mx-2 text-2xl " icon="line-md:text-box"/></h1>
 
                         <button type="button"
                                 onClick={() => setIsModalOpen(true)}
-                                className="ml-auto  hover:bg-red-500/50  border w-32 p-2 rounded-lg font-bold bg-red-300/50 text-gray-700  border-red-600/50 border-2 items-center"><Icon
-                            className="inline mx-2 text-2xl " icon="line-md:question-circle" />注意事項</button>
-                        <button className="ml-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center" onClick={handleExportModalOpen}>
-                            <Icon icon="mdi:file-export" className="mr-2"  width="26" height="26"/>
-                            匯出
+                                className="ml-auto  hover:bg-red-500/50  border w-32 p-2 rounded-lg font-bold bg-red-300/50 text-gray-700  border-red-600/50 border-2 items-center">
+                            <Icon
+                                className="inline mx-2 text-2xl " icon="line-md:question-circle"/>注意事項
                         </button>
+
                     </div>
 
 
                 </div>
             </div>
-
-
-
 
 
             <div className="flex bg-white p-6 rounded shadow-md w-11/12 mx-auto justify-center">
@@ -732,42 +741,45 @@ const Ntunhssu = () => {
                                 className={`m-2 text-white px-4 py-2 rounded ${isOpen.departmentGradeType ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
                                 type="button" onClick={() => toggleDropdown('departmentGradeType')}>
                                 系所/年級/課別 {isOpen.departmentGradeType ?
-                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop"/> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop"/>}
                             </button>
                             <button
                                 className={`m-2 text-white px-4 py-2 rounded ${isOpen.weekday ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
                                 type="button" onClick={() => toggleDropdown('weekday')}>
-                                星期 {isOpen.weekday ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                                星期 {isOpen.weekday ?
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop"/> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop"/>}
                             </button>
                             <button
                                 className={`m-2 text-white px-4 py-2 rounded ${isOpen.system ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
                                 type="button" onClick={() => toggleDropdown('system')}>
-                                學制 {isOpen.system ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                                學制 {isOpen.system ?
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop"/> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop"/>}
                             </button>
                             <button
                                 className={`m-2 text-white px-4 py-2 rounded ${isOpen.period ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
                                 type="button" onClick={() => toggleDropdown('period')}>
-                                節次 {isOpen.period ? <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                                節次 {isOpen.period ?
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop"/> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop"/>}
                             </button>
 
                             <button
                                 className={`m-2 text-white px-4 py-2 rounded ${isOpen.courseCategory ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
                                 type="button" onClick={() => toggleDropdown('courseCategory')}>
                                 課程內容分類 {isOpen.courseCategory ?
-                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop"/> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop"/>}
                             </button>
 
                             <button
                                 className={`m-2 text-white px-4 py-2 rounded ${isOpen.teacherCourse ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
                                 type="button" onClick={() => toggleDropdown('teacherCourse')}>
                                 教師/課程 {isOpen.teacherCourse ?
-                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop" /> :
-                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop" />}
+                                <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop"/> :
+                                <Icon className="inline text-2xl mx-1" icon="line-md:download-loop"/>}
                             </button>
                         </div>
                         <div>
@@ -804,11 +816,13 @@ const Ntunhssu = () => {
                                         <div className="w-3/4 ">
                                             <label htmlFor="department"
                                                    className="block  text-sm font-medium text-gray-700">系所：</label>
-                                            <select id="department" className="mt-1 block w-full py-2 px-3 border rounded-md"
+                                            <select id="department"
+                                                    className="mt-1 block w-full py-2 px-3 border rounded-md"
                                                     onChange={handleDepartmentChange}>
                                                 <option value="">選擇</option>
                                                 {departments.map((dept, index) => (
-                                                    <option key={index} value={dept.AcademicSystemCode}>{dept.DepartmentName}</option>
+                                                    <option key={index}
+                                                            value={dept.AcademicSystemCode}>{dept.DepartmentName}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -906,7 +920,7 @@ const Ntunhssu = () => {
                                                     type="checkbox"
                                                     value={category}
                                                     checked={selectedCourseCategories.includes(category)}
-                                                    onChange={handleCourseCategoryChange} />
+                                                    onChange={handleCourseCategoryChange}/>
                                                 {category}
                                             </label>
                                         ))}
@@ -938,15 +952,17 @@ const Ntunhssu = () => {
                                 </div>
                             )}
                         </div>
-                        <button type="button" onClick={handleSearch1} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        <button type="button" onClick={handleSearch1}
+                                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                             <Icon className="inline text-2xl mx-1" icon="line-md:search-filled"/>查詢
                         </button>
                         <div className="mt-4 text">
 
                             {searchResults.length > 0 ? (
-                                <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                <div style={{maxHeight: '400px', overflowY: 'auto'}}>
                                     <header className="text-2xl font-bold text-center mb-4">查詢結果</header>
-                                    <table className="min-w-full bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto">
+                                    <table
+                                        className="min-w-full bg-white border border-gray-300 rounded-lg divide-y divide-gray-300 table-auto">
                                         <thead className="sticky top-0 bg-gray-200">
                                         <tr>
                                             <th className="py-2 px-4 border-b border-gray-300 bg-gray-200">學年度</th>
@@ -967,7 +983,9 @@ const Ntunhssu = () => {
                                             <tr className="text-center border" key={index}>
                                                 <td className="py-2 px-4">{result.Semester}</td>
                                                 <td className="py-2 px-4">
-                                                    <button type="button" onClick={() => handleSelectTeacher(result.MainInstructorName)} className="text-blue-500 hover:text-blue-800">
+                                                    <button type="button"
+                                                            onClick={() => handleSelectTeacher(result.MainInstructorName)}
+                                                            className="text-blue-500 hover:text-blue-800">
                                                         {result.MainInstructorName}
                                                     </button>
                                                 </td>
@@ -975,34 +993,38 @@ const Ntunhssu = () => {
                                                 <td className="py-2 px-4">
                                                     <button
                                                         type="button"
-                                                        onClick={() => fetchStudentDetails1(result.SubjectNameChinese , result.MainInstructorName,result.AcademicSystem ,
-                                                            result.SubjectCode , result.DepartmentCode , result.CoreCode , result.Grade , result.ClassGroup , result.SubjectNameEnglish
-                                                            , result.MainInstructorName , result.NumberOfStudents , result.Credits , result.WeeksOfClasses , result.CourseTypeName
-                                                            , result.Location , result.Weekday , result.ClassPeriods , result.TimetableNotes , result.CourseSummaryChinese , result.CourseSummaryEnglish
+                                                        onClick={() => fetchStudentDetails1(result.SubjectNameChinese, result.MainInstructorName, result.AcademicSystem,
+                                                            result.SubjectCode, result.DepartmentCode, result.CoreCode, result.Grade, result.ClassGroup, result.SubjectNameEnglish
+                                                            , result.MainInstructorName, result.NumberOfStudents, result.Credits, result.WeeksOfClasses, result.CourseTypeName
+                                                            , result.Location, result.Weekday, result.ClassPeriods, result.TimetableNotes, result.CourseSummaryChinese, result.CourseSummaryEnglish
                                                             , departmentMapping[result.DepartmentCode] || result.DepartmentCode)}
                                                         className="text-blue-500 hover:text-blue-800">
                                                         {result.SubjectNameChinese}
                                                     </button>
                                                 </td>
                                                 <td className="py-2 px-4">{result.Credits}</td>
-                                                <td className="py-2 px-4"> <button
-                                                    type="button"
-                                                    onClick={() => handleSelectLocation(result.Location)}
-                                                    className="text-blue-500 hover:text-blue-800">
-                                                    {result.Location}
-                                                </button>
+                                                <td className="py-2 px-4">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleSelectLocation(result.Location)}
+                                                        className="text-blue-500 hover:text-blue-800">
+                                                        {result.Location}
+                                                    </button>
                                                 </td>
-                                                <td className="py-2 px-4">{result.Weekday}</td>
+                                                <td className="py-2 px-4">{weekdayChineseMap[result.Weekday]}</td>
                                                 <td className="py-2 px-4">{result.ClassPeriods}</td>
                                                 <td className="py-2 px-4">{result.Grade}</td>
                                                 <td className="py-2 px-4">{departmentMapping[result.DepartmentCode] || result.DepartmentCode}</td>
                                                 <td className="py-2 px-4">
-                                                    <button type="button" onClick={() => handleSelectCourse(result)} className="text-blue-500 hover:text-blue-800">選擇課程</button>
+                                                    <button type="button" onClick={() => handleSelectCourse(result)}
+                                                            className="text-blue-500 hover:text-blue-800">選擇課程
+                                                    </button>
                                                 </td>
                                             </tr>
                                         ))}
                                         </tbody>
                                     </table>
+
                                 </div>
                             ) : (
                                 <p className="text-center text-red-600"></p>
@@ -1028,12 +1050,14 @@ const Ntunhssu = () => {
                                         {daysOfWeek.map((day) => {
                                             const slot = schedule[day][index];
                                             return (
-                                                <p key={day} className="py-2 px-4 w-1/4 border border-r flex items-center justify-center">
+                                                <p key={day}
+                                                   className="py-2 px-4 w-1/4 border border-r flex items-center justify-center">
                     <span className="rounded-lg p-">
                         <p className="bg-amber-100 rounded-lg">
                             {slot.course}
                             {slot.course && <span className="ml-2 p-2 text-sm">({slot.credits} 學分)</span>}
-                            {slot.course && <button onClick={() => handleDeleteCourse(day, index)} className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">刪除</button>}
+                            {slot.course && <button onClick={() => handleDeleteCourse(day, index)}
+                                                    className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">刪除</button>}
                         </p>
                     </span>
                                                 </p>
@@ -1043,12 +1067,15 @@ const Ntunhssu = () => {
                                 ))}
 
                             </article>
+                            <button
+                                className="ml-4 bg-green-500 mt-4 hover:bg-green-600 text-white font-bold py-2 px-4 rounded flex items-center"
+                                onClick={handleExportModalOpen}>
+                                <Icon icon="mdi:file-export" className="mr-2" width="26" height="26"/>
+                                匯出
+                            </button>
                         </section>
                     </div>
                 </div>
-
-
-
 
 
             </div>
@@ -1059,7 +1086,7 @@ const Ntunhssu = () => {
             >
                 <div className="flex flex-col items-center">
                     <h1 className="text-2xl font-bold mb-4">注意事項<Icon
-                        className="inline mx-2 text-2xl " icon="svg-spinners:blocks-shuffle-3" /></h1>
+                        className="inline mx-2 text-2xl " icon="svg-spinners:blocks-shuffle-3"/></h1>
 
                     <div>
 
@@ -1073,11 +1100,12 @@ const Ntunhssu = () => {
 
             <Modal isOpen={isModalOpen1} onClose={() => setIsModalOpen1(false)}>
                 <div className="flex flex-col items-center">
-                    <h1 className="text-2xl font-bold mb-4">教師資訊<Icon className="inline mx-2 text-2xl" icon="svg-spinners:blocks-shuffle-3" /></h1>
+                    <h1 className="text-2xl font-bold mb-4">教師資訊<Icon className="inline mx-2 text-2xl"
+                                                                          icon="svg-spinners:blocks-shuffle-3"/></h1>
                     <div className="flex items-center">
                         {/* Image container */}
                         <div className="mr-4">
-                            <img src="cy.png" alt="Teacher" style={{ width: '150px', height: '200px' }} />
+                            <img src="cy.png" alt="Teacher" style={{width: '150px', height: '200px'}}/>
                         </div>
                         {/* Text container */}
                         <div>
@@ -1092,7 +1120,7 @@ const Ntunhssu = () => {
                 <div className="flex flex-col items-center">
                     <h1 className="text-2xl font-bold mb-4">教室位置</h1>
                     <div>
-                        <img src={locationImage} alt="Location" style={{ width: '600px', height: '450px' }} />
+                        <img src={locationImage} alt="Location" style={{width: '600px', height: '450px'}}/>
                     </div>
                 </div>
             </Modal>
@@ -1100,7 +1128,7 @@ const Ntunhssu = () => {
                 <div>
                     <h1 className="text-2xl mb-4 text-center font-bold">課程詳細資料</h1>
                     <table className="table-auto ">
-                        <tbody >
+                        <tbody>
                         <tr>
                             <td className="text-lg font-bold  pl-7 bg-gray-200 border border-gray-400">課程名稱：</td>
                             <td className="text-lg mb-4 pl-7 border border-gray-400">{selectedCourses}</td>
@@ -1153,7 +1181,7 @@ const Ntunhssu = () => {
                         <tr>
                             <td colSpan="4">
                                 <div>
-                                    <div className="mt-8 border border-gray-400" >
+                                    <div className="mt-8 border border-gray-400">
                                         <p className="text-lg font-bold mb-4 pl-7 bg-gray-200 ">備註：</p>
                                         <p className="text-lg mb-4 max-w-5xl pl-7">{selectedTimetableNotes}</p>
                                     </div>
@@ -1173,56 +1201,71 @@ const Ntunhssu = () => {
                     </table>
 
 
-
                 </div>
 
             </Modal>
 
 
-
             <Modal isOpen={isExportModalOpen} onClose={handleCloseExportModal}>
-                <div className="w-[21cm] h-[29.7cm] mx-auto h-full " style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                <div className="w-full flex justify-center  overflow-x-auto p-6"  ref={contentRef}>
-                    <section className="w-full flex flex-col items-center mt-4">
-                        <header className="text-base font-bold text-center mb-4">課表預覽</header>
-                        <article
-                            className="w-full mx-auto border border-gray-300 rounded-lg  overflow-hidden text-center text-xs">
-                            <header className="flex bg-gray-200">
-                                <p className="w-1/4 py-2 px-4 border-r"></p>
-                                {daysOfWeek.map((day) => (
-                                    <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>
-                                ))}
-                            </header>
-                            {timeSlots.map((timeSlot, index) => (
-                                <section key={index} className="flex text-center">
-                                    <div className="w-1/4 border border-r flex items-center justify-center">
-                                        {timeSlot}</div>
-                                    {daysOfWeek.map((day) => {
-                                        const slot = schedule[day][index];
-                                        return (
-                                            <p key={day} className=" px-4 py-5 w-1/4 border border-r flex items-center justify-center">
+                <div className="w-[21cm] h-[29.7cm] mx-auto h-full " style={{maxHeight: '400px', overflowY: 'auto'}}>
+                    <div className="w-full flex justify-center  overflow-x-auto p-6" ref={contentRef}>
+                        <section className="w-full flex flex-col items-center mt-4">
+                            <header className="text-base font-bold text-center mb-4">課表預覽</header>
+                            <article
+                                className="w-full mx-auto border border-gray-300 rounded-lg  overflow-hidden text-center text-xs">
+                                <header className="flex bg-gray-200">
+                                    <p className="w-1/4 py-2 px-4 border-r"></p>
+                                    {daysOfWeek.map((day) => (
+                                        <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>
+                                    ))}
+                                </header>
+                                {timeSlots.map((timeSlot, index) => (
+                                    <section key={index} className="flex text-center">
+                                        <div className="w-1/4 border border-r flex items-center justify-center">
+                                            {timeSlot}</div>
+                                        {daysOfWeek.map((day) => {
+                                            const slot = schedule[day][index];
+                                            return (
+                                                <p key={day}
+                                                   className=" px-4 py-5 w-1/4 border border-r flex items-center justify-center">
                     <span className="rounded-lg p-">
                         <p className="bg-amber-100  rounded-lg">
                             {slot.course}
                             {slot.course && <span className="ml-2 p-2 text-sm">({slot.credits} 學分)</span>}
                         </p>
                     </span>
-                                            </p>
-                                        );
-                                    })}
-                                </section>
-                            ))}
+                                                </p>
+                                            );
+                                        })}
+                                    </section>
+                                ))}
 
-                        </article>
-                    </section>
-                </div>
-                <div className="flex justify-center">
-                <button onClick={generatePDF} style={{ marginTop: '20px' }} className="bg-red-500 hover:bg-red-700 text-white  font-bold py-2 px-4 rounded">
-                    匯出課表
-                </button>
-                </div>
+                            </article>
+                        </section>
+                    </div>
+                    <div className="flex justify-center">
+                        <button onClick={generatePDF} style={{marginTop: '20px'}}
+                                className="bg-red-500 hover:bg-red-700 text-white  font-bold py-2 px-4 rounded">
+                            匯出課表
+                        </button>
+                    </div>
                 </div>
             </Modal>
+
+
+            <footer className="text-center text-sm">
+
+                <Link className="flex justify-center" to="/login">
+
+                    <button
+                        className="inline-block text-sm items-center flex justify-end hover:text-red-800 rounded-t py-1 px-2 text-red-500 font-semibold ">
+                        <Icon icon="material-symbols:login" className="inline mx-2 text-3xl" width="13"
+                              height="13"/>進入管理員後台系統
+                    </button>
+
+                </Link>
+                製作：第6組 李瑜庭、許朝威
+            </footer>
         </div>
 
 
