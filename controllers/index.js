@@ -216,7 +216,7 @@ router.get('/search1', async (req, res) => {
         const pool = req.app.locals.pool;
 
         // Get query string parameters
-        const {Location,Semester, MainInstructorName, SubjectCode, DepartmentCode,Grade, CoreCode, CourseTypeName,AcademicSystem ,Weekday,ClassPeriods} = req.query;
+        const {Location,Semester,TimetableNotes, MainInstructorName, SubjectCode, DepartmentCode,Grade, CoreCode, CourseTypeName,AcademicSystem ,Weekday,ClassPeriods} = req.query;
 
         // Build SQL query string
         let queryString = 'SELECT * FROM Courses ';
@@ -268,6 +268,12 @@ router.get('/search1', async (req, res) => {
 
             // Support multiple values for ClassPeriods with fuzzy matching
             const fuzzyConditions = AcademicSystemsArray.map(System => `AcademicSystem LIKE '%${System}%'`);
+            conditions.push(`(${fuzzyConditions.join(' OR ')})`);
+        } if (TimetableNotes) {
+            const TimetableNotessArray = Array.isArray(TimetableNotes) ? TimetableNotes : [TimetableNotes];
+
+            // Support multiple values for ClassPeriods with fuzzy matching
+            const fuzzyConditions = TimetableNotessArray.map(Notes => `TimetableNotes LIKE '%${Notes}%'`);
             conditions.push(`(${fuzzyConditions.join(' OR ')})`);
         }
 

@@ -384,9 +384,11 @@ const Ntunhssu = () => {
             const classroomCode = document.getElementById('classroom')?.value;
             const classroomCodeQueryParam = classroomCode ? `Location=${classroomCode}` : '';
             const semesterQueryParam = Semester ? `Semester=${Semester}` : '';
+            const courseCategoriesQueryParam = selectedCourseCategories.map(category => `TimetableNotes=${encodeURIComponent(category)}`).join('&');
+
 
             // Combine all query parameters
-            let queryParams = [ semesterQueryParam,classroomCodeQueryParam,departmentCodeQueryParam,weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
+            let queryParams = [ semesterQueryParam,courseCategoriesQueryParam,classroomCodeQueryParam,departmentCodeQueryParam,weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
                 .filter(param => param) // Remove empty strings
                 .join('&');
 
@@ -550,7 +552,16 @@ const Ntunhssu = () => {
         setIsModalOpen2(true);
     };
 
+    const [selectedCourseCategories, setSelectedCourseCategories] = useState([]);
 
+    const handleCourseCategoryChange = (e) => {
+        const value = e.target.value;
+        setSelectedCourseCategories(prev =>
+            prev.includes(value)
+                ? prev.filter(category => category !== value)
+                : [...prev, value]
+        );
+    };
 
     const [selectedCourses, setSelectedCourses] = useState(null);
     const [selectedAcademicSystem, setSelectedAcademicSystem] = useState(null);
@@ -571,6 +582,7 @@ const Ntunhssu = () => {
     const [selectedCourseSummaryChinese, setSelectedCourseSummaryChinese] = useState(null);
     const [selectedCourseSummaryEnglish, setSelectedCourseSummaryEnglish] = useState(null);
     const [selectedMappedDepartment, setSelectedMappedDepartment] = useState(null);
+
     const fetchStudentDetails1 = async (Courses,teacherName,AcademicSystem,SubjectCode,DepartmentCode,CoreCode,Grade,ClassGroup,SubjectNameEnglish,
                                         InstructorName,NumberOfStudents,Credits,WeeksOfClasses,CourseTypeName,Location,Weekday,ClassPeriods,TimetableNotes
                                         ,CourseSummaryChinese,  CourseSummaryEnglish,MappedDepartment) => {
@@ -598,6 +610,14 @@ const Ntunhssu = () => {
         setIsModalOpen3(true);
     };
 
+    const handleTimetableNotesChange = (e) => {
+        const value = e.target.value;
+        setSelectedTimetableNotes(prev =>
+            prev.includes(value)
+                ? prev.filter(item => item !== value)
+                : [...prev, value]
+        );
+    };
 
     const handleDeleteCourse = (day, periodIndex) => {
         setSchedule(prevSchedule => {
@@ -880,10 +900,14 @@ const Ntunhssu = () => {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700">課程內容分類：</label>
                                     <div className="border rounded-l p-4 grid grid-cols-3 gap-4">
-                                        {courseCategories.map(category => (
-                                            <label key={category} className="inline-flex items-center">
-                                                <input type="checkbox" className="form-checkbox" name="courseCategory" value={category} />
-                                                <span className="ml-2">{category}</span>
+                                        {courseCategories.map((category, index) => (
+                                            <label key={index}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={category}
+                                                    checked={selectedCourseCategories.includes(category)}
+                                                    onChange={handleCourseCategoryChange} />
+                                                {category}
                                             </label>
                                         ))}
                                     </div>
