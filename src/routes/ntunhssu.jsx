@@ -2,7 +2,8 @@ import {Helmet} from 'react-helmet';
 import React, {useEffect, useState,useRef} from 'react';
 import {Icon} from '@iconify/react';
 import Modal from "./Modal.jsx";
-import {toast} from "react-toastify";
+import {ToastContainer,toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import html2canvas from "html2canvas";
 import {jsPDF} from "jspdf";
 
@@ -194,6 +195,7 @@ const Ntunhssu = () => {
                 const data = await response.json();
                 if (data.length > 0) {
                     setSearchResults(data); // Set the search results directly
+
                 } else {
                     // If no data is found, display an error message
                     toast.error('未查詢符合資料', {
@@ -252,40 +254,41 @@ const Ntunhssu = () => {
         }
     };
 
+    const weekdayMap = {
+        '1': '星期一',
+        '2': '星期二',
+        '3': '星期三',
+        '4': '星期四',
+        '5': '星期五',
+        '6': '星期六',
+        '7': '星期日',
+    };
     const handleSelectCourse = (course) => {
-        let classPeriodsArray = course.ClassPeriods.split(',').map(period => parseInt(period.trim(), 10));
-
-        if (!Array.isArray(classPeriodsArray) || classPeriodsArray.some(isNaN)) {
-            console.error('ClassPeriods is not a valid array');
-            return;
-        }
-
-        const weekdayMap = {
-            '1': '星期一',
-            '2': '星期二',
-            '3': '星期三',
-            '4': '星期四',
-            '5': '星期五',
-            '6': '星期六',
-            '7': '星期日',
-        };
+        const classPeriodsArray = course.ClassPeriods.split(',').map(period => parseInt(period.trim(), 10));
 
         const weekdayString = weekdayMap[course.Weekday.toString()];
 
-        if (!daysOfWeek.includes(weekdayString)) {
-            console.error('Invalid Weekday value');
+        // Check for conflicts
+        const isConflict = classPeriodsArray.some(period => {
+            const periodIndex = period - 1;
+            return schedule[weekdayString][periodIndex].course !== "";
+        });
+
+        if (isConflict) {
+            // Display conflict warning
+            toast.error('時間衝突，無法選擇此課程！');
             return;
         }
-        setSchedule((prevSchedule) => {
-            const newSchedule = {...prevSchedule};
 
-            classPeriodsArray.forEach((period) => {
+        setSchedule(prevSchedule => {
+            const newSchedule = { ...prevSchedule };
+
+            classPeriodsArray.forEach(period => {
                 const periodIndex = period - 1;
-                // Update the schedule with the course code
-                newSchedule[weekdayString][periodIndex] = {course: course.SubjectNameChinese, credits: course.Credits};
+                newSchedule[weekdayString][periodIndex] = { course: course.SubjectNameChinese, credits: course.Credits };
 
             });
-
+            toast(`已選擇課程：${course.SubjectNameChinese}`);
             return newSchedule;
         });
     };
@@ -397,8 +400,8 @@ const Ntunhssu = () => {
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {
-                    setSearchResults(data); // 更新查詢結果
-
+                    setSearchResults(data);
+                    toast(`已查詢符合資料${data.length}筆`, { className: "font-semibold" })
                 } else {
                     toast.error('未查詢符合資料', { className: "font-semibold" });
                 }
@@ -595,7 +598,7 @@ const Ntunhssu = () => {
         setIsModalOpen3(true);
     };
 
-  
+
     const handleDeleteCourse = (day, periodIndex) => {
         setSchedule(prevSchedule => {
             const newSchedule = { ...prevSchedule };
@@ -612,6 +615,8 @@ const Ntunhssu = () => {
 
     return (
         <div className="bg-gray-100 min-h-screen ">
+            <ToastContainer />
+
             <Helmet>
                 <title>課程查詢系統</title>
             </Helmet>
