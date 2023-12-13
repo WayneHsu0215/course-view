@@ -595,6 +595,20 @@ const Ntunhssu = () => {
         setIsModalOpen3(true);
     };
 
+  
+    const handleDeleteCourse = (day, periodIndex) => {
+        setSchedule(prevSchedule => {
+            const newSchedule = { ...prevSchedule };
+            const courseToDelete = newSchedule[day][periodIndex].course;
+
+            // Iterate through all periods of the day and remove the course
+            newSchedule[day] = newSchedule[day].map(slot =>
+                slot.course === courseToDelete ? { course: "", credits: "" } : slot
+            );
+
+            return newSchedule;
+        });
+    };
 
     return (
         <div className="bg-gray-100 min-h-screen ">
@@ -987,9 +1001,10 @@ const Ntunhssu = () => {
                                             return (
                                                 <p key={day} className="py-2 px-4 w-1/4 border border-r flex items-center justify-center">
                     <span className="rounded-lg p-">
-                        <p className="bg-amber-100  rounded-lg">
+                        <p className="bg-amber-100 rounded-lg">
                             {slot.course}
                             {slot.course && <span className="ml-2 p-2 text-sm">({slot.credits} 學分)</span>}
+                            {slot.course && <button onClick={() => handleDeleteCourse(day, index)} className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">刪除</button>}
                         </p>
                     </span>
                                                 </p>

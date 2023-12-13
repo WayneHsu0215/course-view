@@ -27,7 +27,7 @@ CREATE TABLE Courses (
                          ClassGroup NVARCHAR(50),
                          SubjectNameChinese NVARCHAR(500),
                          SubjectNameEnglish NVARCHAR(500),
-                         InstructorName NVARCHAR(200),
+                         InstructorName NVARCHAR(400),
                          NumberOfStudents  NVARCHAR(50),
                          NumberOfMaleStudents  NVARCHAR(50),
                          NumberOfFemaleStudents  NVARCHAR(50),
