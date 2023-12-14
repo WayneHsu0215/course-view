@@ -25,9 +25,10 @@ const timeSlots = [
 
 
 const initialSchedule = daysOfWeek.reduce((schedule, day) => {
-    schedule[day] = timeSlots.map(() => ({course: "", credits: ""}));
+    schedule[day] = timeSlots.map(() => ({ course: "", credits: "", location: "" }));
     return schedule;
 }, {});
+
 
 const departmentMapping = {
     '11120': '二年制護理系',
@@ -261,12 +262,12 @@ const Ntunhssu = () => {
         '7': '星期日',
     };
     const [totalCredits, setTotalCredits] = useState(0);
+    const [weekendCoursesSelected, setWeekendCoursesSelected] = useState(false);
 
     const handleSelectCourse = (course) => {
         const classPeriodsArray = course.ClassPeriods.split(',').map(period => parseInt(period.trim(), 10));
         const weekdayString = weekdayMap[course.Weekday.toString()];
 
-        // Check for conflicts
         const isConflict = classPeriodsArray.some(period => {
             const periodIndex = period - 1;
             return schedule[weekdayString][periodIndex].course !== "";
@@ -276,22 +277,28 @@ const Ntunhssu = () => {
             toast.error('時間衝突，無法選擇此課程！');
             return;
         }
-
+        if (course.Weekday === '6' || course.Weekday === '7') {
+            setWeekendCoursesSelected(true); // 更新狀態為 true
+        }
         setSchedule(prevSchedule => {
             const newSchedule = {...prevSchedule};
 
             classPeriodsArray.forEach(period => {
                 const periodIndex = period - 1;
-                newSchedule[weekdayString][periodIndex] = {course: course.SubjectNameChinese, credits: course.Credits};
+                newSchedule[weekdayString][periodIndex] = {
+                    course: course.SubjectNameChinese,
+                    credits: course.Credits,
+                    location: course.Location // 添加教室信息
+                };
             });
 
             return newSchedule;
         });
 
-        // 更新學分總計
         setTotalCredits(prevCredits => prevCredits + Number(course.Credits));
         toast(`已選擇課程：${course.SubjectNameChinese}`);
     };
+
 
 
     const [selectedWeekdays, setSelectedWeekdays] = useState([]);
@@ -637,16 +644,27 @@ const Ntunhssu = () => {
             const courseToDelete = newSchedule[day][periodIndex].course;
             setTotalCredits(prevCredits => prevCredits - Number(newSchedule[day][periodIndex].credits));
 
-            // Iterate through all periods of the day and remove the course
             newSchedule[day] = newSchedule[day].map(slot =>
-                slot.course === courseToDelete ? {course: "", credits: ""} : slot
+                slot.course === courseToDelete ? {course: "", credits: "", location: ""} : slot
             );
+
+            const weekendCourses = ['星期六', '星期日'].some(weekendDay =>
+                newSchedule[weekendDay].some(slot => slot.course !== "")
+            );
+
+            if (!weekendCourses) {
+                setWeekendCoursesSelected(false);
+            }
 
             return newSchedule;
         });
     };
 
 
+
+    const isWeekendCourseSelected = () => {
+        return selectedWeekdays.includes("6") || selectedWeekdays.includes("7");
+    };
 
 
     return (
@@ -1064,26 +1082,41 @@ const Ntunhssu = () => {
                                 className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
                                 <header className="flex bg-gray-200">
                                     <p className="w-1/4 py-2 px-4 border-r"></p>
-                                    {daysOfWeek.map((day) => (
-                                        <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>
-                                    ))}
+                                    {daysOfWeek.map((day) => {
+                                        if ((day === '星期六' || day === '星期日') && !weekendCoursesSelected) {
+                                            return null; // 如果是週末且沒有選擇週末課程，則不顯示
+                                        }
+                                        return <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>;
+                                    })}
                                 </header>
                                 {timeSlots.map((timeSlot, index) => (
                                     <section key={index} className="flex text-center">
                                         <div className="w-1/4 border border-r flex items-center justify-center">
                                             {timeSlot}</div>
+
                                         {daysOfWeek.map((day) => {
+                                            if ((day === '星期六' || day === '星期日') && !weekendCoursesSelected) {
+                                                return null; // 如果是週末且沒有選擇週末課程，則不顯示
+                                            }
+
                                             const slot = schedule[day][index];
                                             return (
-                                                <p key={day}
-                                                   className="py-2 px-4 w-1/4 border border-r flex items-center justify-center">
-                    <span className="rounded-lg p-">
-                        <p className="bg-amber-100 rounded-lg">
-                            {slot.course}
-                            {slot.course && <button onClick={() => handleDeleteCourse(day, index)}
-                                                    className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">刪除</button>}
-                        </p>
-                    </span>
+                                                <p key={day} className="px-4 py-5 w-1/4 border border-r flex items-center justify-center">
+            <span className="rounded-lg p-">
+                <p className="bg-amber-100 rounded-lg">
+                    {slot.course}
+                    <br />
+                    {slot.course && (
+                        <>
+                            <span className="text-sm">上課地點：{slot.location}</span> {/* 顯示教室信息 */}
+                            <button onClick={() => handleDeleteCourse(day, index)}
+                                    className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">刪除</button>
+
+                        </>
+
+                    )}
+                </p>
+            </span>
                                                 </p>
                                             );
                                         })}
@@ -1241,31 +1274,42 @@ const Ntunhssu = () => {
                         <section className="w-full flex flex-col items-center mt-4">
                             <p className="text-lg text-sm">學分總計: <strong>{totalCredits}</strong></p>
                             <header className="text-base font-bold text-center mb-4">課表預覽</header>
-                            <article
-                                className="w-full mx-auto border border-gray-300 rounded-lg  overflow-hidden text-center text-xs">
+                            <article className="w-full mx-auto border border-gray-300 rounded-lg overflow-hidden text-center">
                                 <header className="flex bg-gray-200">
                                     <p className="w-1/4 py-2 px-4 border-r"></p>
-                                    {daysOfWeek.map((day) => (
-                                        <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>
-                                    ))}
+                                    {daysOfWeek.map((day) => {
+                                        if ((day === '星期六' || day === '星期日') && !weekendCoursesSelected) {
+                                            return null; // 如果是週末且沒有選擇週末課程，則不顯示
+                                        }
+                                        return <p key={day} className="w-1/4 py-2 px-5 border-r text-center">{day}</p>;
+                                    })}
                                 </header>
                                 {timeSlots.map((timeSlot, index) => (
                                     <section key={index} className="flex text-center">
-                                        <div className="w-1/4 border border-r flex items-center justify-center">
-                                            {timeSlot}</div>
+                                        <div className="w-1/4 border border-r flex items-center justify-center">{timeSlot}</div>
                                         {daysOfWeek.map((day) => {
+                                            if ((day === '星期六' || day === '星期日') && !weekendCoursesSelected) {
+                                                return null; // 如果是週末且沒有選擇週末課程，則不顯示
+                                            }
+
                                             const slot = schedule[day][index];
                                             return (
-                                                <p key={day}
-                                                   className=" px-4 py-5 w-1/4 border border-r flex items-center justify-center">
-                    <span className="rounded-lg p-">
-                        <p className="bg-amber-100  rounded-lg">
-                            {slot.course}
-                        </p>
-                    </span>
+                                                <p key={day} className="px-4 py-5 w-1/4 border border-r flex items-center justify-center">
+            <span className="rounded-lg p-">
+                <p className="bg-amber-100 rounded-lg">
+                    {slot.course}
+                    <br />
+                    {slot.course && (
+                        <>
+                            <span className="text-sm">上課地點：{slot.location}</span> {/* 顯示教室信息 */}
+                        </>
+                    )}
+                </p>
+            </span>
                                                 </p>
                                             );
                                         })}
+
                                     </section>
                                 ))}
 
