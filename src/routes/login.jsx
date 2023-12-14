@@ -1,5 +1,5 @@
 import React, {useState,useContext,useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import { Icon } from '@iconify/react';
 import { AuthContext, AuthProvider }  from "./AuthContext.jsx";
@@ -150,11 +150,25 @@ const Login = () => {
                         </form>
                     </div>
                 </div>
+                <footer className="text-center text-sm">
+
+                    <Link className="flex justify-center" to="/login">
+
+                        <button
+                            className="inline-block text-sm items-center flex justify-end hover:text-red-800 rounded-t py-1 px-2 text-red-500 font-semibold ">
+                            <Icon icon="material-symbols:login" className="inline mx-2 text-3xl" width="13"
+                                  height="13"/>進入學生端系統
+                        </button>
+
+                    </Link>
+                    製作：第6組 李瑜庭、許朝威
+                </footer>
             </div>
 
 
 
         </div>
+
     </div>
     );
 };

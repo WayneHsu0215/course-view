@@ -777,7 +777,7 @@ const Ntunhssu = () => {
                             <button
                                 className={`m-2 text-white px-4 py-2 rounded ${isOpen.teacherCourse ? 'bg-green-700 hover:bg-green-900' : 'bg-green-500 hover:bg-green-700'}`}
                                 type="button" onClick={() => toggleDropdown('teacherCourse')}>
-                                教師/課程 {isOpen.teacherCourse ?
+                                教室/課程 {isOpen.teacherCourse ?
                                 <Icon className="inline text-2xl mx-1" icon="line-md:upload-loop"/> :
                                 <Icon className="inline text-2xl mx-1" icon="line-md:download-loop"/>}
                             </button>

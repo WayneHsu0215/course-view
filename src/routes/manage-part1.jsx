@@ -76,8 +76,9 @@ function Form() {
                             <div className="text-xl m-4" ><Icon className="mr-4 inline text-xl" height="23" width="23" icon="vscode-icons:file-type-excel" />匯入Excel</div>
                             <input className="flex justify-center items-center" type="file" onChange={handleFileUpload} />
                             {uploadProgress > 0 && (
-                                <div style={{ width: '100%', backgroundColor: '#ddd' }}>
-                                    <div style={{ height: '10px', width: `${uploadProgress}%`, backgroundColor: 'green' }}></div>
+                                <div>
+                                    <progress value={uploadProgress} max="100"></progress>
+                                    <span>{uploadProgress}%</span>
                                 </div>
                             )}
                         </div>
