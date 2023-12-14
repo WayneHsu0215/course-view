@@ -260,9 +260,10 @@ const Ntunhssu = () => {
         '6': '星期六',
         '7': '星期日',
     };
+    const [totalCredits, setTotalCredits] = useState(0);
+
     const handleSelectCourse = (course) => {
         const classPeriodsArray = course.ClassPeriods.split(',').map(period => parseInt(period.trim(), 10));
-
         const weekdayString = weekdayMap[course.Weekday.toString()];
 
         // Check for conflicts
@@ -272,7 +273,6 @@ const Ntunhssu = () => {
         });
 
         if (isConflict) {
-            // Display conflict warning
             toast.error('時間衝突，無法選擇此課程！');
             return;
         }
@@ -283,12 +283,16 @@ const Ntunhssu = () => {
             classPeriodsArray.forEach(period => {
                 const periodIndex = period - 1;
                 newSchedule[weekdayString][periodIndex] = {course: course.SubjectNameChinese, credits: course.Credits};
-
             });
-            toast(`已選擇課程：${course.SubjectNameChinese}`);
+
             return newSchedule;
         });
+
+        // 更新學分總計
+        setTotalCredits(prevCredits => prevCredits + Number(course.Credits));
+        toast(`已選擇課程：${course.SubjectNameChinese}`);
     };
+
 
     const [selectedWeekdays, setSelectedWeekdays] = useState([]);
     const [selectedPeriods, setSelectedPeriods] = useState([]);
@@ -489,7 +493,7 @@ const Ntunhssu = () => {
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
                 pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                pdf.save('論文主題專業領域相符審核表.pdf');
+                pdf.save('課程查詢系統課表匯出.pdf');
             });
         }
     };
@@ -631,6 +635,7 @@ const Ntunhssu = () => {
         setSchedule(prevSchedule => {
             const newSchedule = {...prevSchedule};
             const courseToDelete = newSchedule[day][periodIndex].course;
+            setTotalCredits(prevCredits => prevCredits - Number(newSchedule[day][periodIndex].credits));
 
             // Iterate through all periods of the day and remove the course
             newSchedule[day] = newSchedule[day].map(slot =>
@@ -640,6 +645,9 @@ const Ntunhssu = () => {
             return newSchedule;
         });
     };
+
+
+
 
     return (
         <div className="bg-gray-100 min-h-screen ">
@@ -657,19 +665,19 @@ const Ntunhssu = () => {
             {/*        </div>*/}
             {/*    )}*/}
             {/*</div>*/}
-            <div className="flex">
+            <div className="flex ">
                 <div className=" px-6 pb-6 pt-4 rounded  w-11/12 mx-auto">
 
-                    <ul className="flex  mb-6 ">
+                    <ul className=" flex  mb-6 ">
                         <li className="-mb-px mr-1 ">
-                            <a className=" inline-block rounded-t py-1 px-2 text-green-500 font-semibold text-xl"
+                            <a className=" inline-block rounded-t py-1 px-2 text-green-600/80 font-semibold text-xl"
                                href="/"><Icon className="inline mx-2 text-3xl "
                                               icon="line-md:cloud-print-outline-loop"/>課程查詢系統</a>
                         </li>
 
                         <li className="mr-1">
                             <a
-                                className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold text-xl "
+                                className="bg-gray-100 inline-block py-1 px-2 text-green-600/80 hover:text-green-800 font-semibold text-xl "
                                 href="https://system8.ntunhs.edu.tw/myNTUNHS_student/Modules/Main/Index_student.aspx?first=true"
                                 target="_blank"
                                 rel="noopener noreferrer"><Icon className="inline mx-2 text-3xl "
@@ -678,11 +686,29 @@ const Ntunhssu = () => {
                         </li>
                         <li className="mr-1">
                             <a
-                                className="bg-gray-100 inline-block py-1 px-2 text-green-500 hover:text-green-800 font-semibold text-xl"
+                                className="bg-gray-100 inline-block py-1 px-2  text-green-600/80 hover:text-green-800 font-semibold text-xl"
                                 href="https://system16.ntunhs.edu.tw/myNTUNHS_coc/Modules/Main/Index_COC.aspx"
                                 target="_blank"
-                                rel="noopener noreferrer">選課系統</a>
+                                rel="noopener noreferrer"><Icon className="inline mx-2 text-3xl "
+                                                                icon="bx:book"/>選課系統</a>
                         </li>
+                        <li className="mr-1">
+                            <a
+                                className="bg-gray-100 inline-block py-1 px-2  text-green-600/80 hover:text-green-800 font-semibold text-xl"
+                                href="https://system10.ntunhs.edu.tw/AcadInfoSystem/Modules/QueryCourse/CourseList.aspx"
+                                target="_blank"
+                                rel="noopener noreferrer"><Icon className="inline mx-2 text-3xl "
+                                                                icon="ic:twotone-book"/>選課行事曆</a>
+                        </li>
+                        <li className="mr-1">
+                            <a
+                                className="bg-gray-100 inline-block py-1 px-2  text-green-600/80 hover:text-green-800 font-semibold text-xl"
+                                href="https://system10.ntunhs.edu.tw/AcadInfoSystem/Modules/QueryCourse/CourseList.aspx"
+                                target="_blank"
+                                rel="noopener noreferrer"><Icon className="inline mx-2 text-3xl "
+                                                                icon="fluent:people-chat-20-filled"/>課程科目表查詢</a>
+                        </li>
+
 
 
                     </ul>
@@ -714,7 +740,6 @@ const Ntunhssu = () => {
                             <label htmlFor="semester" className="block text-sm font-medium text-gray-700">學期：</label>
                             <select id="semester" className="mt-1 block w-full py-2 px-3 border rounded-md"
                             >
-                                <option value="">請選擇</option>
                                 <option value="1122">112學年度下學期</option>
                                 <option value="1121">112學年度上學期</option>
                                 <option value="1112">111學年度下學期</option>
@@ -1055,7 +1080,6 @@ const Ntunhssu = () => {
                     <span className="rounded-lg p-">
                         <p className="bg-amber-100 rounded-lg">
                             {slot.course}
-                            {slot.course && <span className="ml-2 p-2 text-sm">({slot.credits} 學分)</span>}
                             {slot.course && <button onClick={() => handleDeleteCourse(day, index)}
                                                     className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">刪除</button>}
                         </p>
@@ -1067,6 +1091,11 @@ const Ntunhssu = () => {
                                 ))}
 
                             </article>
+                            <div className="flex justify-center">
+                                <section className="mt-4">
+                                    <p className="text-lg text-sm">學分總計: <strong>{totalCredits}</strong></p>
+                                </section>
+                            </div>
                             <button
                                 className="ml-4 bg-green-500 mt-4 hover:bg-green-600 text-white font-bold py-2 px-4 rounded flex items-center"
                                 onClick={handleExportModalOpen}>
@@ -1210,6 +1239,7 @@ const Ntunhssu = () => {
                 <div className="w-[21cm] h-[29.7cm] mx-auto h-full " style={{maxHeight: '400px', overflowY: 'auto'}}>
                     <div className="w-full flex justify-center  overflow-x-auto p-6" ref={contentRef}>
                         <section className="w-full flex flex-col items-center mt-4">
+                            <p className="text-lg text-sm">學分總計: <strong>{totalCredits}</strong></p>
                             <header className="text-base font-bold text-center mb-4">課表預覽</header>
                             <article
                                 className="w-full mx-auto border border-gray-300 rounded-lg  overflow-hidden text-center text-xs">
@@ -1231,7 +1261,6 @@ const Ntunhssu = () => {
                     <span className="rounded-lg p-">
                         <p className="bg-amber-100  rounded-lg">
                             {slot.course}
-                            {slot.course && <span className="ml-2 p-2 text-sm">({slot.credits} 學分)</span>}
                         </p>
                     </span>
                                                 </p>
