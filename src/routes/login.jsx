@@ -152,7 +152,7 @@ const Login = () => {
                 </div>
                 <footer className="text-center text-sm">
 
-                    <Link className="flex justify-center" to="/login">
+                    <Link className="flex justify-center" to="/">
 
                         <button
                             className="inline-block text-sm items-center flex justify-end hover:text-red-800 rounded-t py-1 px-2 text-red-500 font-semibold ">

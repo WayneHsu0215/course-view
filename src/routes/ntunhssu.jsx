@@ -758,8 +758,8 @@ const Ntunhssu = () => {
                             <label htmlFor="semester" className="block text-sm font-medium text-gray-700">學期：</label>
                             <select id="semester" className="mt-1 block w-full py-2 px-3 border rounded-md"
                             >
-                                <option value="1122">112學年度下學期</option>
                                 <option value="1121">112學年度上學期</option>
+                                <option value="1122">112學年度下學期</option>
                                 <option value="1112">111學年度下學期</option>
                             </select>
                         </div>
@@ -1101,14 +1101,15 @@ const Ntunhssu = () => {
 
                                             const slot = schedule[day][index];
                                             return (
-                                                <p key={day} className="px-4 py-5 w-1/4 border border-r flex items-center justify-center">
+                                                <p key={day} className="px-2 py-1.5 w-1/4 border border-r flex items-center justify-center">
             <span className="rounded-lg p-">
                 <p className="bg-amber-100 rounded-lg">
                     {slot.course}
                     <br />
                     {slot.course && (
                         <>
-                            <span className="text-sm">上課地點：{slot.location}</span> {/* 顯示教室信息 */}
+                            <span className="text-sm">教室：{slot.location}</span> {/* 顯示教室信息 */}
+                            <br />
                             <button onClick={() => handleDeleteCourse(day, index)}
                                     className="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">刪除</button>
 
@@ -1301,7 +1302,7 @@ const Ntunhssu = () => {
                     <br />
                     {slot.course && (
                         <>
-                            <span className="text-sm">上課地點：{slot.location}</span> {/* 顯示教室信息 */}
+                            <span className="text-sm">教室：{slot.location}</span> {/* 顯示教室信息 */}
                         </>
                     )}
                 </p>
