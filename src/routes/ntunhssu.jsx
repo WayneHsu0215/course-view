@@ -401,10 +401,12 @@ const Ntunhssu = () => {
             const classroomCodeQueryParam = classroomCode ? `Location=${classroomCode}` : '';
             const semesterQueryParam = Semester ? `Semester=${Semester}` : '';
             const courseCategoriesQueryParam = selectedCourseCategories.map(category => `TimetableNotes=${encodeURIComponent(category)}`).join('&');
+            const subjectNameChinese = document.getElementById('subjectNameChinese')?.value;
+            const subjectNameChineseQueryParam = subjectNameChinese ? `SubjectNameChinese=${encodeURIComponent(subjectNameChinese)}` : ''; // Query param for Subject Name in Chinese
 
 
             // Combine all query parameters
-            let queryParams = [semesterQueryParam, courseCategoriesQueryParam, classroomCodeQueryParam, departmentCodeQueryParam, weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
+            let queryParams = [subjectNameChineseQueryParam,semesterQueryParam, courseCategoriesQueryParam, classroomCodeQueryParam, departmentCodeQueryParam, weekdayQueryParam, classPeriodsQueryParam, courseTypeQueryParam, subjectCodeQueryParam, systemsQueryParam, gradeQueryParam,]
                 .filter(param => param) // Remove empty strings
                 .join('&');
 
@@ -975,7 +977,6 @@ const Ntunhssu = () => {
                         <div>
                             {isOpen.teacherCourse && (
                                 <div className="flex space-x-4 border rounded-l p-4">
-
                                     <div className="flex-1">
                                         <label htmlFor="course"
                                                className="block text-sm font-medium text-gray-700">課程：</label>
@@ -992,8 +993,17 @@ const Ntunhssu = () => {
                                                placeholder="教室代號"/>
                                     </div>
 
+                                    {/* New field for Subject Name in Chinese */}
+                                    <div className="flex-1">
+                                        <label htmlFor="subjectNameChinese"
+                                               className="block text-sm font-medium text-gray-700">課程名稱（中文）：</label>
+                                        <input type="text" id="subjectNameChinese"
+                                               className="mt-1 block w-full py-2 px-3 border rounded-md"
+                                               placeholder="輸入中文課程名稱"/>
+                                    </div>
                                 </div>
                             )}
+
                         </div>
                         <button type="button" onClick={handleSearch1}
                                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
