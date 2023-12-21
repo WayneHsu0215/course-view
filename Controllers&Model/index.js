@@ -158,16 +158,12 @@ function getAcademicSystem(departmentCode) {
 
 router.get('/search', async (req, res) => {
     try {
-        // 假設連接池在 app.locals.pool 中可用
         const pool = req.app.locals.pool;
 
-        // 获取查询字符串参数
         const {  Semester,MainInstructorName,SubjectCode,DepartmentCode,CoreCode,CourseTypeName} = req.query;
 
-        // 构建 SQL 查询字符串
         let queryString = 'SELECT * FROM Courses ';
 
-        // 构建查询条件
         const conditions = [];
         if (Semester) {
             conditions.push(`Semester LIKE '%${Semester}%'`);
@@ -191,18 +187,15 @@ router.get('/search', async (req, res) => {
         }
 
 
-        // 如果有条件，将它们添加到查询中
         if (conditions.length > 0) {
             queryString += ' WHERE ' + conditions.join(' AND ');
         }
 
-        // 执行查询
+
         const result = await pool.request().query(queryString);
 
-        // 在控制台中打印结果
         console.log(result);
 
-        // 也可以将结果发送到客户端
         res.json(result.recordset);
     } catch (err) {
         console.error('Error querying patient table', err);
@@ -320,16 +313,13 @@ router.get('/departments', async (req, res) => {
     try {
         const pool = req.app.locals.pool;
 
-        // 将查询参数分割成数组
         const academicSystems = req.query.academicSystem.split(',');
 
-        // 动态构建参数列表和查询字符串
         const params = academicSystems.map((system, index) => `@system${index}`);
         let query = `SELECT DepartmentName,AcademicSystemCode FROM AcademicDepartments WHERE AcademicSystem IN (${params.join(', ')})`;
 
         const request = pool.request();
 
-        // 为每个参数赋值
         academicSystems.forEach((system, index) => {
             request.input(`system${index}`, sql.NVarChar, system);
         });

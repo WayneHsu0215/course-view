@@ -45,14 +45,11 @@ const config = {
     }
 };
 
-// 連接資料庫
 sql.connect(config).then(pool => {
     console.log('Connected to the database.');
 
-    // 將資料庫 pool 傳遞給你的控制器，如果需要的話
     app.locals.pool = pool;
 
-    // 使用你的控制器
     app.use('/api', controllers);
 
     const server = app.listen(3251, () => {
