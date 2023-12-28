@@ -760,6 +760,7 @@ const Ntunhssu = () => {
                             <label htmlFor="semester" className="block text-sm font-medium text-gray-700">學期：</label>
                             <select id="semester" className="mt-1 block w-full py-2 px-3 border rounded-md"
                             >
+                                <option value="1122">112學年度下學期</option>
                                 <option value="1121">112學年度上學期</option>
                                 <option value="1122">112學年度下學期</option>
                                 <option value="1112">111學年度下學期</option>
